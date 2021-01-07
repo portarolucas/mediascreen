@@ -11,6 +11,7 @@ let body = document.querySelector("body");
 // Instanciation du convertisseur MarkDown -> HTML
 let converter = new showdown.Converter();
 let timer = 0;
+let index = 0;
 
 if(id == null || id == "") {
     body.innerHTML = "Pas de séquence sélectionnée.";
@@ -23,20 +24,28 @@ if(id == null || id == "") {
         if(screens.length < 1) {
             document.location.href = '/';
         } else {
-            screens.forEach(function(screen, index) {
-                timer += screen.temps;
-                wait(body, screen.contenu, screen.temps, index);
-            });
-            refresh(timer);
+            // screens.forEach(function(screen, index) {
+            //     console.log(screen.temps);
+            //     timer += screen.temps;
+            //     wait(body, screen.contenu, screen.temps, index);
+            // });
+            // refresh(timer);
+
+            wait(body, screens[index].contenu, screens[index].temps, index, screens);
         }
     });
 }
 
 // Fonction permettant d'attendres X secondes avant de passer à l'écran suivant
-function wait(element, contenu, temps, index) {
+function wait(element, contenu, temps, index, test) {
+    // setTimeout(function() {
+    //     element.innerHTML = converter.makeHtml(contenu);
+    // }, temps * index);
     setTimeout(function() {
         element.innerHTML = converter.makeHtml(contenu);
-    }, temps * index);  
+        index++;
+        wait(body, test[index].contenu, test[index].temps, index, test);
+    }, temps);
 }
 
 // Refresh de la page à la fin du timer donné
