@@ -1,5 +1,5 @@
 // URL vers l'API
-const API = "http://localhost:8000";
+const API = "http://mediascreen.ezcorp.fr";
 
 // Récuperer le paramètre de l'URL
 let url = new URL(window.location.href);
@@ -24,33 +24,26 @@ if(id == null || id == "") {
         if(screens.length < 1) {
             document.location.href = '/';
         } else {
-            // screens.forEach(function(screen, index) {
-            //     console.log(screen.temps);
-            //     timer += screen.temps;
-            //     wait(body, screen.contenu, screen.temps, index);
-            // });
-            // refresh(timer);
-
-            wait(body, screens[index].contenu, screens[index].temps, index, screens);
+            wait(screens[index].contenu, screens[index].temps, screens);
         }
     });
 }
 
 // Fonction permettant d'attendres X secondes avant de passer à l'écran suivant
-function wait(element, contenu, temps, index, test) {
-    // setTimeout(function() {
-    //     element.innerHTML = converter.makeHtml(contenu);
-    // }, temps * index);
+function wait(contenu, temps, screens) {
+    body.innerHTML = converter.makeHtml(contenu);
     setTimeout(function() {
-        element.innerHTML = converter.makeHtml(contenu);
-        index++;
-        wait(body, test[index].contenu, test[index].temps, index, test);
+        if(screens[index + 1]) {
+          index++;
+        } else {
+          index = 0;
+          refresh();
+        }
+        wait(screens[index].contenu, screens[index].temps, screens);
     }, temps);
 }
 
-// Refresh de la page à la fin du timer donné
-function refresh(timer) {
-    setTimeout(function() {
-        window.location.reload();
-    }, timer);
+// Rafraichissement de la page
+function refresh() {
+    window.location.reload();
 }
