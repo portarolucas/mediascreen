@@ -1,21 +1,47 @@
+// URL vers l'API
 const API = "http://localhost:8000";
-let body = document.querySelector("body");
-let converter = new showdown.Converter();
 
-fetch(API + "/ecrans/1")
-.then(response => response.json())
-.then(function (screens) {
-    screens.forEach((screen, index) => {
-        if(index == 0) {
-            body.innerHTML = converter.makeHtml(screen.contenu);
+// Récuperer le paramètre de l'URL
+let url = new URL(window.location.href);
+let id = url.searchParams.get('id');
+
+// Element HTML "body"
+let body = document.querySelector("body");
+
+// Instanciation du convertisseur MarkDown -> HTML
+let converter = new showdown.Converter();
+let timer = 0;
+
+if(id == null || id == "") {
+    body.innerHTML = "Pas de séquence sélectionnée.";
+} else {
+    // Récupération des écrans appartenant à une séquence donnée
+    fetch(API + "/ecrans/" + id)
+    .then(response => response.json())
+    .then(function (screens) {
+        // Si la séquence ne contient pas d'écran(s)
+        if(screens.length < 1) {
+            document.location.href = '/';
         } else {
-            wait(body, screen.contenu, screen.temps, index);
+            screens.forEach(function(screen, index) {
+                timer += screen.temps;
+                wait(body, screen.contenu, screen.temps, index);
+            });
+            refresh(timer);
         }
     });
-});
+}
 
+// Fonction permettant d'attendres X secondes avant de passer à l'écran suivant
 function wait(element, contenu, temps, index) {
-    setInterval(() => {
+    setTimeout(function() {
         element.innerHTML = converter.makeHtml(contenu);
     }, temps * index);  
+}
+
+// Refresh de la page à la fin du timer donné
+function refresh(timer) {
+    setTimeout(function() {
+        window.location.reload();
+    }, timer);
 }
