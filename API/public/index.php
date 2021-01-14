@@ -6,7 +6,6 @@ use MediaScreenAPI\Controller\Controller as API;
 
 require_once '../vendor/autoload.php';
 
-
 // Chargement de la base de données
 $config = parse_ini_file('../config/db.ini');
 $db = new \Illuminate\Database\Capsule\Manager();

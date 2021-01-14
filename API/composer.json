@@ -11,8 +11,8 @@
         "illuminate/database": "^8.21"
     },
     "autoload": {
-        "psr-0": {
-            "MediaScreenAPI": "src/"
+        "psr-4": {
+            "MediaScreenAPI\\": "src/MediaScreenAPI/"
         }
     }
 }

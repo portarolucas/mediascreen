@@ -46,6 +46,10 @@ class ComposerStaticInit0a2c36d585c799002739442fa25374a7
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
         ),
+        'M' => 
+        array (
+            'MediaScreenAPI\\' => 15,
+        ),
         'I' => 
         array (
             'Illuminate\\Support\\' => 19,
@@ -132,6 +136,10 @@ class ComposerStaticInit0a2c36d585c799002739442fa25374a7
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'MediaScreenAPI\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/MediaScreenAPI',
+        ),
         'Illuminate\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/collections',
@@ -170,13 +178,6 @@ class ComposerStaticInit0a2c36d585c799002739442fa25374a7
             'Pimple' => 
             array (
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
-            ),
-        ),
-        'M' => 
-        array (
-            'MediaScreenAPI' => 
-            array (
-                0 => __DIR__ . '/../..' . '/src',
             ),
         ),
     );
