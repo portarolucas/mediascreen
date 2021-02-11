@@ -52,10 +52,10 @@ class PagesPostController extends Controller {
         $exist = Ecran::where('id', '=', $id)->count();
         
         if(!$exist) {
-            echo "L'écran que vous essayez de supprimer n'existe pas !";
+            return "L'écran que vous essayez de supprimer n'existe pas !";
         } else {
             Ecran::where('id', '=', $id)->delete();
-            echo "success";
+            return "success";
         }
     }
 
@@ -68,10 +68,37 @@ class PagesPostController extends Controller {
         $exist = Ecran::where('id', '=', $id)->count();
 
         if(!$exist) {
-            echo "L'écran que vous essayez de modifier n'existe pas !";
+            return "L'écran que vous essayez de modifier n'existe pas !";
         } else {
             Ecran::where('id', '=', $id)->update(['nom' => $name, 'id_sequence' => $id_sequence, 'temps' => $temps * 1000]);
-            echo "success";
+            return "success";
+        }
+    }
+
+    public function sequenceDelete(Request $request, Response $response) {
+        $id = $request->getParam('id');
+        $exist = Sequence::where('id', '=', $id)->count();
+        
+        if(!$exist) {
+            return "La séquence que vous essayez de supprimer n'existe pas !";
+        } else {
+            Ecran::where('id_sequence', '=', $id)->delete();
+            Sequence::where('id', '=', $id)->delete();
+            return "success";
+        }
+    }
+
+    public function sequenceUpdate(Request $request, Response $response) {
+        $id = $request->getParam('id');
+        $name = htmlspecialchars(trim($request->getParam('newNom')));
+
+        $exist = Sequence::where('id', '=', $id)->count();
+
+        if(!$exist) {
+            return "La séquence que vous essayez de modifier n'existe pas !";
+        } else {
+            Sequence::where('id', '=', $id)->update(['nom' => $name]);
+            return "success";
         }
     }
 

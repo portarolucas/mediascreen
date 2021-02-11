@@ -7,8 +7,25 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
   <link rel="stylesheet" href="https://unpkg.com/browse/normalize.css@8.0.1/normalize.css">
   <link rel="stylesheet" href="./css/gestion_sequence.css">
+
+  <style>
+    .notification{
+      position: fixed;
+      top: 0;left:0;
+      width: 100%;
+    }
+  </style>
+
+
+
 </head>
 <body>
+  
+  <div id="notification_block" class="notification" style="z-index: 999;display: none;">
+    <button class="delete" onclick="hideNotification()"></button>
+    <p></p>
+  </div>
+
   <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
     <div class="container">
       <a class="navbar-brand" href="admin_panel.html">Retour</a>
@@ -192,7 +209,7 @@
                       <h4 class="modal-title" id="deleteSequenceLabel_3">Supprimer une séquence :</h4>
                     </div>
                     <div class="modal-body">
-                      <p>Êtes-vous sûr de vouloir supprimer la séquence : Écran salle de pause (coin café) ?</p>
+                      <p>Êtes-vous sûr de vouloir supprimer la séquence : Écran salle de pause (coin café) ? <br>Attention : celà supprimera tous les écrans associés à cette séquence !</p>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
@@ -207,6 +224,88 @@
       </table>
     </div>
   </div>
+  <script type="text/javascript">
+  function hideNotification(){
+    $('#notification_block').fadeOut('500', () => {
+      $('#notification_block').removeClass();
+    });
+  }
+
+  function showNotification(libelle_bootstrap, message){
+    hideNotification();
+    $('#notification_block p').text(message)
+    $('#notification_block').addClass("notification")
+    $('#notification_block').addClass(classStatus)
+    $('#notification_block').fadeIn('500');
+  }
+
+  function deleteSequence(id, leBtn)
+  {
+      let model = $(leBtn).parents().closest('.modal');
+      let lineDelet = $(leBtn).parents().closest('tr');
+
+      let http = new XMLHttpRequest();
+      let params =
+          'id=' + id;
+      http.open('POST', './../public/app/resources/model/ajax_gestionEcran.php?delSequence', true);
+
+      http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      http.onreadystatechange = function()
+      {
+          if(http.readyState == 4 && http.status == 200)
+          {
+              if(http.responseText == 'success')
+              {
+                  $(model).modal('hide');
+                  showNotification('success', "La séquence a bien été supprimée.");
+                  $(lineDelet).hide('slow', function(){ $(lineDelet).remove(); });
+              }
+              else
+              {
+                showNotification('danger', 'Erreur : ' + http.responseText);
+              }
+          }
+      }
+      http.send(params);
+  }
+  function updateEcran(id, leBtn){
+    let bodyModal = $(leBtn).parent().prev('.modal-body');
+    let nom = $(bodyModal).find('.update_nomSequence').val();
+
+    if(id, nom) {
+      let model = $(leBtn).parents().closest('.modal');
+      let lineUpdate = $(leBtn).parents().closest('tr');
+      let http = new XMLHttpRequest();
+
+      let params =
+      'id=' + id
+      + '&newNom=' + nom;
+      http.open('POST', './../public/app/resources/model/ajax_gestionEcran.php?updateSequence', true);
+
+      http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      http.onreadystatechange = function () {
+        if(http.readyState == 4 && http.status == 200)
+        {
+            if(http.responseText == 'success')
+            {
+                $(model).modal('hide');
+                createMessageAlert('blue', 'Succès', "L'écran : " + nom + " a bien été mis à jour.")
+                $(lineDelet).hide('slow', function(){ $(lineDelet).remove(); });
+            }
+            else
+            {
+                createMessageAlert('red', 'Erreur', http.responseText);
+            }
+        }
+      }
+      http.send(params);
+    }
+    else
+    {
+      alert("Une erreur est survenue : des champs sont manquants, introuvable, ou incomplet \n\rSi le problème persiste actualisez la page ou contacter l'administrateur du site");
+    }
+  }
+  </script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </body>

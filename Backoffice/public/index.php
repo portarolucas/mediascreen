@@ -50,4 +50,10 @@ $app->post('/screen/delete', PagesPostController::class . ':screenDelete')->setN
 // Route : Modification d'un écran (POST)
 $app->post('/screen/update', PagesPostController::class . ':screenUpdate')->setName('screenUpdate');
 
+// Route : Suppression d'une séquence (POST)
+$app->post('/sequence/delete', PagesPostController::class . ':sequenceDelete')->setName('sequenceDelete');
+
+// Route : Modification d'une séquence (POST)
+$app->post('/sequence/update', PagesPostController::class . ':sequenceUpdate')->setName('sequenceUpdate');
+
 $app->run();
