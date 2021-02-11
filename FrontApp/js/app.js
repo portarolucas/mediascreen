@@ -1,5 +1,5 @@
 // URL vers l'API
-const API = "http://mediascreen.ezcorp.fr";
+const API = "http://localhost:8000";
 
 // Récuperer le paramètre de l'URL
 let url = new URL(window.location.href);

@@ -3,7 +3,7 @@ $container = $app->getContainer();
 
 $container['view'] = function($container) {
     $dir = dirname(__DIR__);
-    $view = new \Slim\Views\Twig($dir . '/app/views', [
+    $view = new \Slim\Views\Twig($dir . '/app/Views', [
         // 'cache' => $dir . '/tmp/cache'
     ]);
 
