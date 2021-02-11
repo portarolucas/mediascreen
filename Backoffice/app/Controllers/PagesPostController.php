@@ -47,4 +47,32 @@ class PagesPostController extends Controller {
         return $this->redirect($response, 'createScreen');
     }
 
+    public function screenDelete(Request $request, Response $response) {
+        $id = $request->getParam('id');
+        $exist = Ecran::where('id', '=', $id)->count();
+        
+        if(!$exist) {
+            echo "L'écran que vous essayez de supprimer n'existe pas !";
+        } else {
+            Ecran::where('id', '=', $id)->delete();
+            echo "success";
+        }
+    }
+
+    public function screenUpdate(Request $request, Response $response) {
+        $id = $request->getParam('id');
+        $name = htmlspecialchars(trim($request->getParam('newNom')));
+        $id_sequence = htmlspecialchars(trim($request->getParam('newSequence')));
+        $temps = htmlspecialchars(trim($request->getParam('newEcranTime')));
+
+        $exist = Ecran::where('id', '=', $id)->count();
+
+        if(!$exist) {
+            echo "L'écran que vous essayez de modifier n'existe pas !";
+        } else {
+            Ecran::where('id', '=', $id)->update(['nom' => $name, 'id_sequence' => $id_sequence, 'temps' => $temps * 1000]);
+            echo "success";
+        }
+    }
+
 }

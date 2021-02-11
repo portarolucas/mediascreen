@@ -44,4 +44,10 @@ $app->get('/sequences', PagesGetController::class . ':sequences')->setName('sequ
 // Route : Page de gestion des écrans (GET)
 $app->get('/screens', PagesGetController::class . ':screens')->setName('screens');
 
+// Route : Suppression d'un écran (POST)
+$app->post('/screen/delete', PagesPostController::class . ':screenDelete')->setName('screenDelete');
+
+// Route : Modification d'un écran (POST)
+$app->post('/screen/update', PagesPostController::class . ':screenUpdate')->setName('screenUpdate');
+
 $app->run();

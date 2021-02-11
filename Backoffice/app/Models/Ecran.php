@@ -7,7 +7,9 @@ class Ecran extends Model {
 
     protected $table = 'ecrans';
     protected $primaryKey = 'id';
-    public $timestamp = false;
+    public $timestamps = false;
+
+    protected $fillable = ['nom', 'id_sequence', 'temps'];
 
     public function sequence() {
         return $this->belongsTo('App\Models\Sequence', 'id_sequence');

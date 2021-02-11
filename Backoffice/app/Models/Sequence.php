@@ -7,7 +7,7 @@ class Sequence extends Model {
 
     protected $table = 'sequences';
     protected $primaryKey = 'id';
-    public $timestamp = false;
+    public $timestamps = false;
 
     public function ecran() {
         return $this->hasMany('App\Models\Ecran', 'id_sequence');

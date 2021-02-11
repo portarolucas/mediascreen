@@ -32,7 +32,8 @@ class PagesGetController extends Controller {
 
     public function Screens(Request $request, Response $response) {
         $screens = Ecran::select()->with('sequence')->get();
-        $this->render($response, 'Pages/Screens.twig', ['screens' => $screens]);
+        $sequences = Sequence::get();
+        $this->render($response, 'Pages/Screens.twig', ['screens' => $screens, 'sequences' => $sequences]);
     }
 
 }
