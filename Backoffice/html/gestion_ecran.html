@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Gestion des écrans - MediaScreen</title>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://unpkg.com/browse/normalize.css@8.0.1/normalize.css">
+  <link rel="stylesheet" href="./css/gestion_ecran.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
+    <div class="container">
+      <a class="navbar-brand" href="admin_panel.html">Retour</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <i class="fas fa-user-cog"></i>
+            <a class="nav-link" href="#">Lucaas855</a>
+          </li>
+          <li class="nav-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <a class="nav-link" href="#">Déconnexion</a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+  <div class="main-content">
+    <div class="container">
+      <h1>Gestion écran</h1>
+      <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th style="width: 10%;">ID</th>
+            <th style="width: 30%;">Nom écran</th>
+            <th style="width: 15%;">Écran associé</th>
+            <th style="width: 15%;">Type d'écran</th>
+            <th style="width: 10%;">Durée</th>
+            <th style="width: 10%;">Auteur</th>
+            <th style="width: 5%;"></th>
+            <th style="width: 5%;"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="panel_ID">1</td>
+            <td class="panel_nomEcran">Écran salle 2</td>
+            <td class="panel_seqAssocie">Écran salle 2</td>
+            <td class="panel_typeEcran">Markdown</td>
+            <td class="panel_duree">366s</td>
+            <td class="panel_auteur">Lucaas855</td>
+            <td class="panel_update">
+              <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editEcran_1">
+                <i class="far fa-edit"></i>
+              </button>
+              <div class="modal fade exampleModalClass" id="editEcran_1" tabindex="-1" role="dialog" aria-labelledby="editEcranLabel_1">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="editEcranLabel_1">Modifier l'écran</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="form-group">
+                          <label class="control-label">Nom écran :</label>
+                          <input type="text" value="Écran salle 2" class="form-control update_nomEcran">
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                      <button type="button" class="btn btn-dark" onclick="updateEcran(1, this)">Modifier la écran</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="panel_delete">
+              <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal" data-target="#deleteEcran_1">
+              <div class="modal fade" id="deleteEcran_1" tabindex="-1" role="dialog" aria-labelledby="deleteEcranLabel_1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="deleteEcranLabel_1">Supprimer un écran :</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>Êtes-vous sûr de vouloir supprimer la écran : Écran salle 2 ?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                      <button type="button" class="btn btn-danger btn-ok" onclick="deleteEcran(1, this)">Supprimer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

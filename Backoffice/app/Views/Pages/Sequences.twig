@@ -1,0 +1,83 @@
+{% extends "layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/css/gestion_sequence.css">
+{% endblock %}
+
+{% block content %}
+<h1>Gestion des séquences</h1>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th style="width: 30%;">Nom de la séquence</th>
+            <th style="width: 25%;">Nombre d'écrans associés</th>
+            <th style="width: 25%;">Auteur</th>
+            <th style="width: 5%;"></th>
+            <th style="width: 5%;"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for sequence in sequences %}
+            <tr>
+            <td class="panel_nomSeq"><span class="editable">{{ sequence.nom }}</span></td>
+            <td class="panel_nombreEcran"><span class="editable">{{ sequence.ecran|length }}</span></td>
+            <td class="panel_auteur"><span class="editable">{{ sequence.auteur }}</span></td>
+            <td class="panel_update">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editSequence_1">
+                    <i class="far fa-edit"></i>
+                </button>
+                <div class="modal fade exampleModalClass" id="editSequence_1" tabindex="-1" role="dialog"
+                    aria-labelledby="editSequenceLabel_1">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="editSequenceLabel_1">Modifier la séquence</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span
+                                        aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label class="control-label">Nom de la séquence :</label>
+                                        <input type="text" value="Écran salle 2"
+                                            class="form-control update_nomSequence">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-dark" onclick="updateSequence(1, this)">Modifier la
+                                    séquence</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="panel_delete">
+                <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal"
+                    data-target="#deleteSequence_1">
+                <div class="modal fade" id="deleteSequence_1" tabindex="-1" role="dialog"
+                    aria-labelledby="deleteSequenceLabel_1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="deleteSequenceLabel_1">Supprimer une séquence :</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Êtes-vous sûr de vouloir supprimer la séquence : Écran salle 2 ?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-danger btn-ok"
+                                    onclick="deleteSequence(1, this)">Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/css/admin_style.css">
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-around">
+    <div class="col-4 box">
+        <h1>Séquences</h1>
+        <hr>
+        <a href="{{ path_for('sequences') }}">
+            <button type="button" class="btn btn-outline-warning btn-sm">Gestion des séquences</button>
+        </a>
+        <a href="{{ path_for('createSequence') }}">
+            <button type="button" class="btn btn-outline-success btn-sm">Nouvelle séquence</button>
+        </a>
+    </div>
+    <div class="col-4 box">
+        <h1>Écrans</h1>
+        <hr>
+        <a href="{{ path_for('screens') }}">
+            <button type="button" class="btn btn-outline-warning btn-sm">Gestion des écrans</button>
+        </a>
+        <a href="{{ path_for('createScreen') }}">
+            <button type="button" class="btn btn-outline-success btn-sm">Nouvel écran</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

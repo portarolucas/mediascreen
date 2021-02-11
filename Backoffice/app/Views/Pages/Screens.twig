@@ -1,0 +1,92 @@
+{% extends "layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/css/gestion_ecran.css">
+{% endblock %}
+
+{% block content %}
+<h1>Gestion des écrans</h1>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th style="width: 30%;">Nom de l'écran</th>
+            <th style="width: 15%;">Séquence associée</th>
+            <th style="width: 15%;">Type d'écran</th>
+            <th style="width: 10%;">Durée</th>
+            <th style="width: 10%;">Auteur</th>
+            <th style="width: 5%;"></th>
+            <th style="width: 5%;"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for screen in screens %}
+        <tr>
+            <td class="panel_nomEcran">{{ screen.nom }}</td>
+            <td class="panel_seqAssocie">{{ screen.sequence.nom }}</td>
+            <td class="panel_typeEcran">
+            {% if screen.id_type == 1 %}
+                Markdown
+            {% elseif screen.id_type == 2 %}
+                Vidéo
+            {% endif %}
+            </td>
+            <td class="panel_duree">{{ screen.temps / 1000 }}s</td>
+            <td class="panel_auteur">{{ screen.auteur }}</td>
+            <td class="panel_update">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editEcran_1">
+                    <i class="far fa-edit"></i>
+                </button>
+                <div class="modal fade exampleModalClass" id="editEcran_1" tabindex="-1" role="dialog"
+                    aria-labelledby="editEcranLabel_1">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="editEcranLabel_1">Modifier l'écran</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span
+                                        aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label class="control-label">Nom écran :</label>
+                                        <input type="text" value="Écran salle 2" class="form-control update_nomEcran">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-dark" onclick="updateEcran(1, this)">Modifier l'
+                                    écran</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="panel_delete">
+                <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal"
+                    data-target="#deleteEcran_1">
+                <div class="modal fade" id="deleteEcran_1" tabindex="-1" role="dialog"
+                    aria-labelledby="deleteEcranLabel_1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="deleteEcranLabel_1">Supprimer un écran :</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Êtes-vous sûr de vouloir supprimer l'écran : Écran salle 2 ?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-danger btn-ok"
+                                    onclick="deleteEcran(1, this)">Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

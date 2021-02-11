@@ -1,0 +1,74 @@
+{% extends "layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/css/new_ecran.css">
+{% endblock %}
+
+{% block content %}
+<h1>Création d'un écran</h1>
+
+{% if flash.success %}
+<div class="alert alert-success" role="alert">
+  {{ flash.success }}
+</div>
+{% endif %}
+
+{% if flash.error %}
+<div class="alert alert-danger" role="alert">
+  {{ flash.error }}
+</div>
+{% endif %}
+
+<div class="box">
+    <form action="{{ path_for('createScreen') }}" method="post">
+    <div class="form-group">
+        <label for="screen_name" class="form-label">Nom de l'écran</label>
+        <input type="text" class="form-control" id="screen_name" name="screen_name" required>
+    </div>
+    <div class="form-group">
+        <label for="sequence_associee">Séquence associée</label>
+        <select class="form-control" id="sequence_associee" name="sequence_associee">
+            <option disabled selected>Séléctionner une séquence</option>
+            {% for sequence in sequences %}
+                <option value="{{ sequence.id }}">[ID:{{ sequence.id }}] {{ sequence.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="screen_type">Type d'écran</label>
+        <select class="form-control" onchange="ecranType_func()" id="screen_type" name="screen_type">
+            <option disabled selected>Séléctionner un type</option>
+            <option value="markdown">Markdown</option>
+            <option value="video">Vidéo</option>
+        </select>
+    </div>
+    <div class="form-group video-field" style="display: none;">
+        <label for="import_video">Importer une vidéo</label>
+        <input type="file" accept="video/mp4, video/webm" class="form-control-file" id="import_video">
+    </div>
+    <div class="form-group markdown-field" style="display: none;">
+        <label for="markdown_area">Veuillez saisir votre text markdown ci-dessous :</label>
+        <textarea class="form-control" id="markdown_area" name="markdown_area" rows="5"></textarea>
+    </div>
+    <div class="form-group markdown-field" style="display: none;">
+        <label for="screen_time">Veuillez saisir le temps d'affichage de l'écran (en seconde) :</label>
+        <input class="form-control" type="number" id="screen_time" name="screen_time">
+    </div>
+    <button type="submit" class="btn btn-outline-success">Créer l'écran</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+function ecranType_func() {
+    if ($('#screen_type').val() == "markdown") {
+        $('.video-field').css("display", "none");
+        $('.markdown-field').css("display", "block");
+    } else if ($('#screen_type').val() == "video") {
+        $('.markdown-field').css("display", "none");
+        $('.video-field').css("display", "block");
+    }
+}
+</script>
+{% endblock %}
