@@ -1,28 +1,24 @@
 <?php
 
+require_once '../vendor/autoload.php';
+
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use MediaScreenAPI\Controller\Controller as API;
 
-require_once '../vendor/autoload.php';
-
+$settings       = require_once __DIR__ .'/../config/settings.php';
+$dependencies   = require_once __DIR__ .'/../config/dependencies.php';
+$errors         = require_once __DIR__ .'/../config/errors.php';
+ 
 // Chargement de la base de données
-$config = parse_ini_file('../config/db.ini');
+$config = parse_ini_file($settings['settings']['dbfile']);
 $db = new \Illuminate\Database\Capsule\Manager();
 $db->addConnection($config);
 $db->setAsGlobal();
 $db->bootEloquent();
 
-
-// Slim en mode debug pour afficher le détail des erreurs
-// A désactiver en production !
-$debug = [
-    'settings' => [
-        'displayErrorDetails' => true,
-    ],
-];
-$d = new \Slim\Container($debug);
-$app = new \Slim\App($d);
+$c = new \Slim\Container(array_merge($settings, $dependencies, $errors));
+$app = new \Slim\App($c);
 
 
 // Route : récupérations de toutes les séquences

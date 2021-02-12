@@ -8,7 +8,10 @@
     ],
     "require": {
         "slim/slim": "3.*",
-        "illuminate/database": "^8.21"
+        "illuminate/database": "^8.21",
+        "monolog/monolog": "^2.1",
+        "erusev/parsedown": "^1.7",
+        "michelf/php-markdown": "^1.9"
     },
     "autoload": {
         "psr-4": {
