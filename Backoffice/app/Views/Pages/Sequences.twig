@@ -35,11 +35,11 @@
     <tbody>
         {% for sequence in sequences %}
             <tr>
-            <td class="panel_nomSeq"><span class="editable">{{ sequence.nom }}</span></td>
+            <td class="panel_nomSeq"><a href="{{ path_for('screens', {id: sequence.id}) }}" class="editable">{{ sequence.nom }}</a></td>
             <td class="panel_nombreEcran"><span class="editable">{{ sequence.ecran|length }}</span></td>
             <td class="panel_auteur"><span class="editable">{{ sequence.auteur }}</span></td>
             <td class="panel_update">
-                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editSequence_{{ sequence.id }}">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editSequence_{{ sequence.id }}">
                     <i class="far fa-edit"></i>
                 </button>
                 <div class="modal fade exampleModalClass" id="editSequence_{{ sequence.id }}" tabindex="-1" role="dialog"
@@ -62,7 +62,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                <button type="submit" class="btn btn-dark" onclick="updateSequence({{ sequence.id }}, this)">Modifier la
+                                <button type="button" class="btn btn-dark" onclick="updateSequence({{ sequence.id }}, this)">Modifier la
                                     séquence</button>
                             </div>
                         </div>

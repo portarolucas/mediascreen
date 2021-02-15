@@ -5,22 +5,10 @@
 {% endblock %}
 
 {% block content %}
-<h1>Création d'un écran</h1>
-
-{% if flash.success %}
-<div class="alert alert-success" role="alert">
-  {{ flash.success }}
-</div>
-{% endif %}
-
-{% if flash.error %}
-<div class="alert alert-danger" role="alert">
-  {{ flash.error }}
-</div>
-{% endif %}
+<h1>Création d'un écran pour la séquence : {{ sequence.nom }}</h1>
 
 <div class="box">
-    <form action="{{ path_for('createScreen') }}" method="post">
+    <form action="{{ path_for('createScreen', {id: id}) }}" method="post">
     <div class="form-group">
         <label for="screen_name" class="form-label">Nom de l'écran</label>
         <input type="text" class="form-control" id="screen_name" name="screen_name" required>
@@ -28,10 +16,7 @@
     <div class="form-group">
         <label for="sequence_associee">Séquence associée</label>
         <select class="form-control" id="sequence_associee" name="sequence_associee">
-            <option disabled selected>Séléctionner une séquence</option>
-            {% for sequence in sequences %}
-                <option value="{{ sequence.id }}">[ID:{{ sequence.id }}] {{ sequence.nom }}</option>
-            {% endfor %}
+            <option disabled selected value="{{ sequence.id }}">{{ sequence.nom }}</option>
         </select>
     </div>
     <div class="form-group">

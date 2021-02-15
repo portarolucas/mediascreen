@@ -20,9 +20,14 @@ class PagesGetController extends Controller {
         $this->render($response, 'Pages/CreateSequence.twig');
     }
 
-    public function createScreen(Request $request, Response $response) {
-        $sequences = Sequence::get();
-        $this->render($response, 'Pages/CreateScreen.twig', ['sequences' => $sequences]);
+    public function createScreen(Request $request, Response $response, $args) {
+        $id = $args['id'];
+        $sequence = Sequence::where('id', $id)->first();
+        if(is_null($sequence)) {
+            return $this->redirect($response, 'sequences');
+        } else {
+            $this->render($response, 'Pages/CreateScreen.twig', ['sequence' => $sequence, 'id' => $id]);
+        }
     }
 
     public function Sequences(Request $request, Response $response) {
@@ -30,10 +35,16 @@ class PagesGetController extends Controller {
         $this->render($response, 'Pages/Sequences.twig', ['sequences' => $sequences]);
     }
 
-    public function Screens(Request $request, Response $response) {
-        $screens = Ecran::select()->with('sequence')->get();
-        $sequences = Sequence::get();
-        $this->render($response, 'Pages/Screens.twig', ['screens' => $screens, 'sequences' => $sequences]);
+    public function Screens(Request $request, Response $response, $args) {
+        $id = $args['id'];
+        $screens = Ecran::where('id_sequence', $id)->with('sequence')->get();
+        $sequence = Sequence::where('id', $id)->first();
+
+        if(is_null($sequence)) {
+            return $this->redirect($response, 'sequences');
+        } else {
+            $this->render($response, 'Pages/Screens.twig', ['screens' => $screens, 'sequence' => $sequence, 'id' => $id]);
+        }
     }
 
 }

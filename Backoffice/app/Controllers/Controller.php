@@ -20,8 +20,8 @@ class Controller {
         $this->container->view->render($response, $file, $params);
     }
 
-    public function redirect($response, $name) {
-        return $response->withStatus(200)->withHeader('Location', $this->router->pathFor($name));
+    public function redirect($response, $name, $args = []) {
+        return $response->withStatus(200)->withHeader('Location', $this->router->pathFor($name, $args));
     }
 
     public function flash($message, $type = 'success') {

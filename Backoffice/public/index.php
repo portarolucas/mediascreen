@@ -33,16 +33,16 @@ $app->get('/create/sequence', PagesGetController::class . ':createSequence')->se
 $app->post('/create/sequence', PagesPostController::class . ':createSequence');
 
 // Route : Page de création d'un écran (GET)
-$app->get('/create/screen', PagesGetController::class . ':createScreen')->setName('createScreen');
+$app->get('/create/screen/{id}', PagesGetController::class . ':createScreen')->setName('createScreen');
 
 // Route : Page de création d'un écran (POST)
-$app->post('/create/screen', PagesPostController::class . ':createScreen');
+$app->post('/create/screen/{id}', PagesPostController::class . ':createScreen');
 
 // Route : Page de gestion des séquences (GET)
 $app->get('/sequences', PagesGetController::class . ':sequences')->setName('sequences');
 
 // Route : Page de gestion des écrans (GET)
-$app->get('/screens', PagesGetController::class . ':screens')->setName('screens');
+$app->get('/screens/{id}', PagesGetController::class . ':screens')->setName('screens');
 
 // Route : Suppression d'un écran (POST)
 $app->post('/screen/delete', PagesPostController::class . ':screenDelete')->setName('screenDelete');

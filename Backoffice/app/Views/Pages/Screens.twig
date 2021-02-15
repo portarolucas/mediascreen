@@ -9,6 +9,12 @@
       left:0;
       width: 100%;
     }
+
+    {% if screens is empty %}
+        table {
+            display: none;
+        }
+    {% endif %}
   </style>
 {% endblock %}
 
@@ -20,12 +26,14 @@
     <p></p>
 </div>
 
-<h1>Gestion des écrans</h1>
+<h1>Écrans de la séquence : {{ sequence.nom }}</h1>
+
+<a href="{{ path_for('createScreen', {id: id}) }}" class="btn btn-primary">Créer un écran</a>
+
 <table class="table table-sm table-hover">
     <thead>
         <tr>
             <th style="width: 25%;">Nom de l'écran</th>
-            <th style="width: 25%;">Séquence associée</th>
             <th style="width: 15%;">Type d'écran</th>
             <th style="width: 15%;">Durée</th>
             <th style="width: 10%;">Auteur</th>
@@ -34,88 +42,84 @@
         </tr>
     </thead>
 
-    <tbody>
+    {% if screens is empty %}
+        Aucun écrans associée à la séquence {{ sequence.nom }} !
+    {% else %}
+        <tbody>
     {% for screen in screens %}
-        <tr>
-            <td class="panel_nomEcran">{{ screen.nom }}</td>
-            <td class="panel_seqAssocie">{{ screen.sequence.nom }}</td>
-            <td class="panel_typeEcran">
-            {% if screen.id_type == 1 %}
-                Markdown
-            {% elseif screen.id_type == 2 %}
-                Vidéo
-            {% endif %}
-            </td>
-            <td class="panel_duree">{{ screen.temps / 1000 }}s</td>
-            <td class="panel_auteur">{{ screen.auteur }}</td>
-            <td class="panel_update">
-                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editEcran_{{ screen.id }}">
-                    <i class="far fa-edit"></i>
-                </button>
-                <div class="modal fade exampleModalClass" id="editEcran_{{ screen.id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="editEcranLabel_{{ screen.id }}">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="editEcranLabel_{{ screen.id }}">Modifier l'écran</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span
-                                        aria-hidden="true">×</span></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="form-group">
-                                        <label class="control-label">Nom écran :</label>
-                                        <input type="text" value="{{ screen.nom }}"
-                                            class="form-control update_nomEcran">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Séquence associée :</label>
-                                        <select class="form-control update_sequenceEcran">
-                                            {% for sequence in sequences %}
-                                            <option value="{{ sequence.id }}"{{ (sequence.id == screen.id_sequence) ? 'selected' : '' }}>{{ sequence.nom }}</option>                                       
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Veuillez saisir le temps de l'écran (en seconde)
-                                            :</label>
-                                        <input class="form-control update_ecran_time" value="{{ screen.temps / 1000 }}" type="number">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-dark" onclick="updateEcran({{ screen.id }}, this)">Modifier
-                                    l'écran</button>
+            <tr>
+                <td class="panel_nomEcran">{{ screen.nom }}</td>
+                <td class="panel_typeEcran">
+                {% if screen.id_type == 1 %}
+                    Markdown
+                {% elseif screen.id_type == 2 %}
+                    Vidéo
+                {% endif %}
+                </td>
+                <td class="panel_duree">{{ screen.temps / 1000 }}s</td>
+                <td class="panel_auteur">{{ screen.auteur }}</td>
+                <td class="panel_update">
+                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editEcran_{{ screen.id }}">
+                        <i class="far fa-edit"></i>
+                    </button>
+                    <div class="modal fade exampleModalClass" id="editEcran_{{ screen.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="editEcranLabel_{{ screen.id }}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="editEcranLabel_{{ screen.id }}">Modifier l'écran</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span
+                                            aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="control-label">Nom écran :</label>
+                                            <input type="text" value="{{ screen.nom }}"
+                                                class="form-control update_nomEcran">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Veuillez saisir le temps de l'écran (en seconde)
+                                                :</label>
+                                            <input class="form-control update_ecran_time" value="{{ screen.temps / 1000 }}" type="number">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-dark" onclick="updateEcran({{ screen.id }}, this)">Modifier
+                                        l'écran</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </td>
-            <td class="panel_delete">
-                <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal"
-                    data-target="#deleteEcran_{{ screen.id }}">
-                <div class="modal fade" id="deleteEcran_{{ screen.id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="deleteEcranLabel_{{ screen.id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="deleteEcranLabel_{{ screen.id }}">Supprimer un écran :</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p>Êtes-vous sûr de vouloir supprimer la écran : {{ screen.nom }}?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-danger btn-ok"
-                                    onclick="deleteEcran({{ screen.id }}, this)">Supprimer</button>
+                </td>
+                <td class="panel_delete">
+                    <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal"
+                        data-target="#deleteEcran_{{ screen.id }}">
+                    <div class="modal fade" id="deleteEcran_{{ screen.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="deleteEcranLabel_{{ screen.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="deleteEcranLabel_{{ screen.id }}">Supprimer un écran :</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Êtes-vous sûr de vouloir supprimer la écran : {{ screen.nom }}?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-danger btn-ok"
+                                        onclick="deleteEcran({{ screen.id }}, this)">Supprimer</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </td>
-        </tr>
-    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+
     </tbody>
 </table>
 {% endblock %}
@@ -165,11 +169,9 @@ function deleteEcran(id, leBtn) {
 function updateEcran(id, leBtn) {
     let bodyModal = $(leBtn).parent().prev('.modal-body');
     let nom = $(bodyModal).find('.update_nomEcran').val();
-    let sequenceAssocie = $(bodyModal).find('.update_sequenceEcran').val();
-    let sequenceAssocieText = $(bodyModal).find('.update_sequenceEcran option:selected').text();
     let ecranTime = $(bodyModal).find('.update_ecran_time').val();
 
-    if (nom && sequenceAssocie && ecranTime) {
+    if (nom && ecranTime) {
         let model = $(leBtn).parents().closest('.modal');
         let lineUpdate = $(leBtn).parents().closest('tr');
         let http = new XMLHttpRequest();
@@ -177,7 +179,6 @@ function updateEcran(id, leBtn) {
         let params =
             'id=' + id +
             '&newNom=' + nom +
-            '&newSequence=' + sequenceAssocie +
             '&newEcranTime=' + ecranTime;
         http.open('POST', '{{ path_for('screenUpdate') }}', true);
 
@@ -187,8 +188,7 @@ function updateEcran(id, leBtn) {
                   console.log(http.responseText);
                 if (http.responseText == 'success') {
                     $(lineUpdate).find('.panel_nomEcran').text(nom);
-                    $(lineUpdate).find('.panel_seqAssocie').text(sequenceAssocieText);
-                    $(lineUpdate).find('.panel_duree').text(ecranTime);
+                    $(lineUpdate).find('.panel_duree').text(ecranTime + "s");
                     $(model).modal('hide');
                     showNotification('success', "Succès : L'écran : " + nom + " a bien été modifié.");
                 } else {
@@ -198,7 +198,7 @@ function updateEcran(id, leBtn) {
         }
         http.send(params);
     } else {
-        alert("Une erreur est survenue : des champs sont manquants, introuvable, ou incomplet \n\rSi le problème persiste actualisez la page ou contacter l'administrateur du site");
+        alert("Une erreur est survenue : des champs sont manquants, introuvable, ou incomplet \n\rSi le problème persiste actualisez la page ou contacter l'administrateur du site.");
     }
 }
 </script>

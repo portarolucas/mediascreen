@@ -25,9 +25,9 @@ class PagesPostController extends Controller {
         return $this->redirect($response, 'createSequence');
     }
 
-    public function createScreen(Request $request, Response $response) {
+    public function createScreen(Request $request, Response $response, $args) {
         $screen_name = htmlspecialchars(trim($request->getParam('screen_name')));
-        $id_sequence = htmlspecialchars(trim($request->getParam('sequence_associee')));
+        $id_sequence = htmlspecialchars(trim($args['id']));
         $type = htmlspecialchars(trim($request->getParam('screen_type')));
         $markdown = htmlspecialchars(trim($request->getParam('markdown_area')));
         $screen_time = htmlspecialchars(trim($request->getParam('screen_time')));
@@ -40,11 +40,10 @@ class PagesPostController extends Controller {
                     $this->flash("Le contenu de l'écran et/ou le temps d'affichage ne peuvent être vide !", 'error');
                 } else {
                     Ecran::insert(['nom' => $screen_name, 'contenu' => $markdown, 'temps' => $screen_time * 1000, 'id_sequence' => $id_sequence, 'id_type' => 1]);
-                    $this->flash("L'écran a été créé avec succès !");
                 }
             }
         }
-        return $this->redirect($response, 'createScreen');
+        return $this->redirect($response, 'screens', ['id' => $id_sequence]);
     }
 
     public function screenDelete(Request $request, Response $response) {
@@ -62,7 +61,6 @@ class PagesPostController extends Controller {
     public function screenUpdate(Request $request, Response $response) {
         $id = $request->getParam('id');
         $name = htmlspecialchars(trim($request->getParam('newNom')));
-        $id_sequence = htmlspecialchars(trim($request->getParam('newSequence')));
         $temps = htmlspecialchars(trim($request->getParam('newEcranTime')));
 
         $exist = Ecran::where('id', '=', $id)->count();
@@ -70,7 +68,7 @@ class PagesPostController extends Controller {
         if(!$exist) {
             return "L'écran que vous essayez de modifier n'existe pas !";
         } else {
-            Ecran::where('id', '=', $id)->update(['nom' => $name, 'id_sequence' => $id_sequence, 'temps' => $temps * 1000]);
+            Ecran::where('id', '=', $id)->update(['nom' => $name, 'temps' => $temps * 1000]);
             return "success";
         }
     }
