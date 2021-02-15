@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 
+use App\Controllers\Auth\AuthController;
 use App\Models\Ecran;
 use App\Models\Sequence;
 use Slim\Http\Request;
@@ -14,6 +15,11 @@ class PagesGetController extends Controller {
 
     public function login(Request $request, Response $response) {
         $this->render($response, 'Pages/Login.twig');
+    }
+
+    public function logout(Request $request, Response $response) {
+        AuthController::logout();
+        return $this->redirect($response, 'login');
     }
 
     public function createSequence(Request $request, Response $response) {

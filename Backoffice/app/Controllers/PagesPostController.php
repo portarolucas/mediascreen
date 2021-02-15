@@ -1,12 +1,29 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Ecran;
-use App\Models\Sequence;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use App\Models\Ecran;
+use App\Models\Sequence;
+use App\Controllers\Auth\AuthController;
 
 class PagesPostController extends Controller {
+
+    public function login(Request $request, Response $response) {
+        $email = htmlspecialchars(trim($request->getParam('email_address')));
+        $password = htmlspecialchars(trim($request->getParam('password')));
+        
+        if(empty($email) || empty($password)) {
+            $this->flash('Un ou plusieurs champs sont vide(s) !', 'error');
+        } else {
+            if(!AuthController::login($email, $password)) {
+                $this->flash('Adresse email ou mot de passe incorrect !', 'error');
+            } else {
+                return $this->redirect($response, 'home');
+            }
+        }
+        return $this->redirect($response, 'login');
+    }
 
     public function createSequence(Request $request, Response $response) {
         $seq_name = htmlspecialchars(trim($request->getParam('name_seq')));
@@ -18,7 +35,7 @@ class PagesPostController extends Controller {
             if($exist) {
                 $this->flash('Cette séquence existe déjà !', 'error');
             } else {
-                Sequence::insert(['nom' => $seq_name]);
+                Sequence::insert(['nom' => $seq_name, 'auteur' => $_SESSION['id']]);
                 $this->flash('La séquence a été créée avec succès !');
             }
         }
@@ -39,7 +56,7 @@ class PagesPostController extends Controller {
                 if(empty($markdown) || empty($screen_time) || $screen_time == '0') {
                     $this->flash("Le contenu de l'écran et/ou le temps d'affichage ne peuvent être vide !", 'error');
                 } else {
-                    Ecran::insert(['nom' => $screen_name, 'contenu' => $markdown, 'temps' => $screen_time * 1000, 'id_sequence' => $id_sequence, 'id_type' => 1]);
+                    Ecran::insert(['nom' => $screen_name, 'contenu' => $markdown, 'temps' => $screen_time * 1000, 'id_sequence' => $id_sequence, 'id_type' => 1, 'auteur' => $_SESSION['id']]);
                 }
             }
         }

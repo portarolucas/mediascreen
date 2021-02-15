@@ -27,11 +27,11 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <i class="fas fa-user-cog"></i>
-            <a class="nav-link" href="#">JohnDoe</a>
+            <a class="nav-link" href="#">{{ auth.prenom ~ ' ' ~ auth.nom }}</a>
           </li>
           <li class="nav-item">
             <i class="fas fa-sign-out-alt"></i>
-            <a class="nav-link" href="#">Déconnexion</a>
+            <a class="nav-link" href="{{ path_for('logout') }}">Déconnexion</a>
           </li>
         </ul>
 

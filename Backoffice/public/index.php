@@ -3,6 +3,8 @@ require_once '../vendor/autoload.php';
 
 use App\Controllers\PagesGetController;
 use App\Controllers\PagesPostController;
+use App\Middlewares\AuthMiddleware;
+use App\Middlewares\GuestMiddleware;
 
 session_start();
 
@@ -20,40 +22,52 @@ $container = $app->getContainer();
 // Middlewares
 $app->add(new \App\Middlewares\FlashMiddleware($container->view->getEnvironment()));
 
-// Route : Page d'accueil (GET)
-$app->get('/', PagesGetController::class . ':home')->setName('home');
+// Routes : utilisateur non connecté
+$app->group('', function() {
+    // Route : Page de connexion (GET)
+    $this->get('/login', PagesGetController::class . ':login')->setName('login');
 
-// Route : Page de connexion (GET)
-$app->get('/login', PagesGetController::class . ':login')->setName('login');
+    // Route : Page de connexion (POST)
+    $this->post('/login', PagesPostController::class . ':login');
+})->add(new GuestMiddleware($container));
 
-// Route : Page de création d'une séquence (GET)
-$app->get('/create/sequence', PagesGetController::class . ':createSequence')->setName('createSequence');
+// Routes : utilisateur connecté
+$app->group('', function() {
+    // Route : Page d'accueil (GET)
+    $this->get('/', PagesGetController::class . ':home')->setName('home');
 
-// Route : Page de création d'une séquence (POST)
-$app->post('/create/sequence', PagesPostController::class . ':createSequence');
+    // Route : Page de création d'une séquence (GET)
+    $this->get('/create/sequence', PagesGetController::class . ':createSequence')->setName('createSequence');
 
-// Route : Page de création d'un écran (GET)
-$app->get('/create/screen/{id}', PagesGetController::class . ':createScreen')->setName('createScreen');
+    // Route : Page de création d'une séquence (POST)
+    $this->post('/create/sequence', PagesPostController::class . ':createSequence');
 
-// Route : Page de création d'un écran (POST)
-$app->post('/create/screen/{id}', PagesPostController::class . ':createScreen');
+    // Route : Page de création d'un écran (GET)
+    $this->get('/create/screen/{id}', PagesGetController::class . ':createScreen')->setName('createScreen');
 
-// Route : Page de gestion des séquences (GET)
-$app->get('/sequences', PagesGetController::class . ':sequences')->setName('sequences');
+    // Route : Page de création d'un écran (POST)
+    $this->post('/create/screen/{id}', PagesPostController::class . ':createScreen');
 
-// Route : Page de gestion des écrans (GET)
-$app->get('/screens/{id}', PagesGetController::class . ':screens')->setName('screens');
+    // Route : Page de gestion des séquences (GET)
+    $this->get('/sequences', PagesGetController::class . ':sequences')->setName('sequences');
 
-// Route : Suppression d'un écran (POST)
-$app->post('/screen/delete', PagesPostController::class . ':screenDelete')->setName('screenDelete');
+    // Route : Page de gestion des écrans (GET)
+    $this->get('/screens/{id}', PagesGetController::class . ':screens')->setName('screens');
 
-// Route : Modification d'un écran (POST)
-$app->post('/screen/update', PagesPostController::class . ':screenUpdate')->setName('screenUpdate');
+    // Route : Suppression d'un écran (POST)
+    $this->post('/screen/delete', PagesPostController::class . ':screenDelete')->setName('screenDelete');
 
-// Route : Suppression d'une séquence (POST)
-$app->post('/sequence/delete', PagesPostController::class . ':sequenceDelete')->setName('sequenceDelete');
+    // Route : Modification d'un écran (POST)
+    $this->post('/screen/update', PagesPostController::class . ':screenUpdate')->setName('screenUpdate');
 
-// Route : Modification d'une séquence (POST)
-$app->post('/sequence/update', PagesPostController::class . ':sequenceUpdate')->setName('sequenceUpdate');
+    // Route : Suppression d'une séquence (POST)
+    $this->post('/sequence/delete', PagesPostController::class . ':sequenceDelete')->setName('sequenceDelete');
+
+    // Route : Modification d'une séquence (POST)
+    $this->post('/sequence/update', PagesPostController::class . ':sequenceUpdate')->setName('sequenceUpdate');  
+
+    // Route : Page de déconnexion (GET)
+    $this->get('/logout', PagesGetController::class . ':logout')->setName('logout');
+})->add(new AuthMiddleware($container));
 
 $app->run();

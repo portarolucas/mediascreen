@@ -15,4 +15,8 @@ class Ecran extends Model {
         return $this->belongsTo('App\Models\Sequence', 'id_sequence');
     }
 
+    public function author() {
+        return $this->belongsTo('App\Models\Utilisateur', 'auteur');
+    }
+
 }

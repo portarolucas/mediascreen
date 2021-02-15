@@ -37,7 +37,7 @@
             <tr>
             <td class="panel_nomSeq"><a href="{{ path_for('screens', {id: sequence.id}) }}" class="editable">{{ sequence.nom }}</a></td>
             <td class="panel_nombreEcran"><span class="editable">{{ sequence.ecran|length }}</span></td>
-            <td class="panel_auteur"><span class="editable">{{ sequence.auteur }}</span></td>
+            <td class="panel_auteur"><span class="editable">{{ sequence.author.prenom }} {{ sequence.author.nom }}</span></td>
             <td class="panel_update">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editSequence_{{ sequence.id }}">
                     <i class="far fa-edit"></i>

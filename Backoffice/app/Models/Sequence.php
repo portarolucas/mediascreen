@@ -12,4 +12,8 @@ class Sequence extends Model {
     public function ecran() {
         return $this->hasMany('App\Models\Ecran', 'id_sequence');
     }
+
+    public function author() {
+        return $this->belongsTo('App\Models\Utilisateur', 'auteur');
+    }
 }

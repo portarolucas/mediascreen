@@ -9,5 +9,8 @@ $container['view'] = function($container) {
 
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
     $view->addExtension(new \Slim\Views\TwigExtension($container['router'], $basePath));
+
+    $view->getEnvironment()->addGlobal('auth', $_SESSION);
+
     return $view;
 };
