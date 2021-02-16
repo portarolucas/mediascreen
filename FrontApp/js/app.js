@@ -3,7 +3,7 @@ const API = "http://localhost:8000";
 
 // Récuperer le paramètre de l'URL
 let url = new URL(window.location.href);
-let id = url.searchParams.get('id');
+let token = url.searchParams.get('token');
 
 // Element HTML "body"
 let body = document.querySelector("body");
@@ -13,15 +13,19 @@ let converter = new showdown.Converter();
 let timer = 0;
 let index = 0;
 
-if(id == null || id == "") {
-    body.innerHTML = "Pas de séquence sélectionnée.";
+if(token == null || token == "") {
+    document.location.href="?token=" + promptBox();
 } else {
     // Récupération des écrans appartenant à une séquence donnée
-    fetch(API + "/ecrans/" + id)
+    fetch(API + "/get/" + token)
     .then(response => response.json())
     .then(function (screens) {
         // Si la séquence ne contient pas d'écran(s)
         if(screens.length < 1) {
+            document.location.href = '/';
+        // Sinon si le token est invalide
+        } else if('Error' in screens) {
+            alert('Token invalide !');
             document.location.href = '/';
         } else {
             wait(screens[index].contenu, screens[index].temps, screens);
@@ -46,4 +50,9 @@ function wait(contenu, temps, screens) {
 // Rafraichissement de la page
 function refresh() {
     window.location.reload();
+}
+
+function promptBox() {
+    let response;
+    return message = prompt("Entrez votre token d'authentification :");
 }
