@@ -17,5 +17,8 @@
         "psr-4": {
             "MediaScreenAPI\\": "src/MediaScreenAPI/"
         }
+    },
+    "scripts": {
+        "start": "php -S localhost:8000 -t public"
     }
 }
