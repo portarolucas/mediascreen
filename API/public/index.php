@@ -5,6 +5,7 @@ require_once '../vendor/autoload.php';
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use MediaScreenAPI\Controller\Controller as API;
+use MediaScreenAPI\Middlewares\TokenMiddleware;
 
 $settings       = require_once __DIR__ .'/../config/settings.php';
 $dependencies   = require_once __DIR__ .'/../config/dependencies.php';
@@ -20,42 +21,51 @@ $db->bootEloquent();
 $c = new \Slim\Container(array_merge($settings, $dependencies, $errors));
 $app = new \Slim\App($c);
 
+$app->group('', function() {
+    // Route : récupérations de toutes les séquences
+    $this->get('/sequences', function(Request $req, Response $resp, $args) {
+        $response = $resp->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(API::getSequences());
+        return $response;
+    });
 
-// Route : récupérations de toutes les séquences
-$app->get('/sequences', function(Request $req, Response $resp, $args) {
-    $response = $resp->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(API::getSequences());
-    return $response;
-});
+    // Route : récupération d'une séquence à partir de son ID
+    $this->get('/sequence/{id}', function(Request $req, Response $resp, $args) {
+        $id = $args['id'];
+        $response = $resp->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(API::getSequence($id));
+        return $response;
+    });
 
-// Route : récupération d'une séquence à partir de son ID
-$app->get('/sequence/{id}', function(Request $req, Response $resp, $args) {
-    $id = $args['id'];
-    $response = $resp->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(API::getSequence($id));
-    return $response;
-});
+    // Route : récupérations de tous les écrans
+    $this->get('/ecrans', function(Request $req, Response $resp, $args) {
+        $response = $resp->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(API::getEcrans());
+        return $response;
+    });
 
-// Route : récupérations de tous les écrans
-$app->get('/ecrans', function(Request $req, Response $resp, $args) {
-    $response = $resp->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(API::getEcrans());
-    return $response;
-});
+    // Route : récupérations de tous les écrans appartenant à une même séquence à partir de l'ID de celle-ci
+    $this->get('/ecrans/{id}', function(Request $req, Response $resp, $args) {
+        $id = $args['id'];
+        $response = $resp->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(API::getEcransSequence($id));
+        return $response;
+    });
 
-// Route : récupérations de tous les écrans appartenant à une même séquence à partir de l'ID de celle-ci
-$app->get('/ecrans/{id}', function(Request $req, Response $resp, $args) {
-    $id = $args['id'];
-    $response = $resp->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(API::getEcransSequence($id));
-    return $response;
-});
+    // Route : récupérations d'un écran à partir de son ID
+    $this->get('/ecran/{id}', function(Request $req, Response $resp, $args) {
+        $id = $args['id'];
+        $response = $resp->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(API::getEcran($id));
+        return $response;
+    });
+})->add(new TokenMiddleware($c));
 
-// Route : récupérations d'un écran à partir de son ID
-$app->get('/ecran/{id}', function(Request $req, Response $resp, $args) {
-    $id = $args['id'];
+// Route : récupération des écrans de la séquence associée au token
+$app->get('/get/{token}', function(Request $req, Response $resp, $args) {
+    $token = $args['token'];
     $response = $resp->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(API::getEcran($id));
+    $response->getBody()->write(API::getEcransToken($token));
     return $response;
 });
 

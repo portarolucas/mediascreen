@@ -4,13 +4,14 @@ namespace MediaScreenAPI\Controller;
 
 use MediaScreenAPI\Models\Sequence;
 use MediaScreenAPI\Models\Ecran;
+use MediaScreenAPI\Models\Dispositif;
 
 class Controller {
 
 
     // Méthode statique permettant de générer une erreur
-    public static function setError() {
-        return json_encode(['Error' => 'No data']);
+    public static function setError($message = 'No data') {
+        return json_encode(['Error' => $message]);
     }
     
     // Méthode statique permettant de récuperer toutes les séquences
@@ -50,6 +51,21 @@ class Controller {
             return json_encode($ecrans);
         } else {
             return self::setError();
+        }
+    }
+
+    public static function getEcransToken($token) {
+        $dispositif = Dispositif::where('token', $token)->first();
+        if(!is_null($dispositif)) {
+            $id_sequence = $dispositif->id_sequence;
+            $ecrans = Ecran::select()->where('id_sequence', $id_sequence)->get();
+            if(!is_null($ecrans)) {
+                return json_encode($ecrans);
+            } else {
+                return self::setError();
+            }
+        } else {
+            return self::setError('invalid token');
         }
     }
 
