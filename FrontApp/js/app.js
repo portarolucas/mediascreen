@@ -13,8 +13,8 @@ let converter = new showdown.Converter();
 let timer = 0;
 let index = 0;
 
-if(token == null || token == "") {
-    document.location.href="?token=" + promptBox();
+if(token == null || token == '') {
+    document.location.href = '/';
 } else {
     // Récupération des écrans appartenant à une séquence donnée
     fetch(API + "/get/" + token)
@@ -50,9 +50,4 @@ function wait(contenu, temps, screens) {
 // Rafraichissement de la page
 function refresh() {
     window.location.reload();
-}
-
-function promptBox() {
-    let response;
-    return message = prompt("Entrez votre token d'authentification :");
 }
