@@ -36,3 +36,4 @@
 [2021-02-12T17:16:29.237751+00:00] error.log.ERROR: GET http://localhost/mediascreen-master/API/public/s : malformed uri [] []
 [2021-02-12T19:24:01.094506+00:00] error.log.ERROR: GET http://localhost/mediascreen-master/API/public/azer : malformed uri [] []
 [2021-02-12T19:25:02.731362+00:00] error.log.ERROR: GET http://localhost/mediascreen-master/API/public/azer : malformed uri [] []
+[2021-02-16T17:13:33.211780+00:00] error.log.ERROR: GET http://localhost:8000/ : malformed uri [] []
