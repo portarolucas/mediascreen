@@ -27,7 +27,7 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <i class="fas fa-user-cog"></i>
-            <a class="nav-link" href="#">{{ auth.prenom ~ ' ' ~ auth.nom }}</a>
+            <a class="nav-link" href="{{ path_for('profile') }}">{{ auth.prenom }} {{ auth.nom }}</a>
           </li>
           <li class="nav-item">
             <i class="fas fa-sign-out-alt"></i>

@@ -36,12 +36,12 @@ class PagesGetController extends Controller {
         }
     }
 
-    public function Sequences(Request $request, Response $response) {
+    public function sequences(Request $request, Response $response) {
         $sequences = Sequence::select()->with('ecran')->get();
         $this->render($response, 'Pages/Sequences.twig', ['sequences' => $sequences]);
     }
 
-    public function Screens(Request $request, Response $response, $args) {
+    public function screens(Request $request, Response $response, $args) {
         $id = $args['id'];
         $screens = Ecran::where('id_sequence', $id)->with('sequence')->get();
         $sequence = Sequence::where('id', $id)->first();
@@ -51,6 +51,10 @@ class PagesGetController extends Controller {
         } else {
             $this->render($response, 'Pages/Screens.twig', ['screens' => $screens, 'sequence' => $sequence, 'id' => $id]);
         }
+    }
+
+    public function profile(Request $request, Response $response) {
+        $this->render($response, 'Pages/Profile.twig');
     }
 
 }

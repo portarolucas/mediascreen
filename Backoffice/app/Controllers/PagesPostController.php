@@ -6,6 +6,8 @@ use Slim\Http\Response;
 use App\Models\Ecran;
 use App\Models\Sequence;
 use App\Controllers\Auth\AuthController;
+use App\Models\Utilisateur;
+use Illuminate\Container\Util;
 
 class PagesPostController extends Controller {
 
@@ -115,6 +117,26 @@ class PagesPostController extends Controller {
             Sequence::where('id', '=', $id)->update(['nom' => $name]);
             return "success";
         }
+    }
+
+    public function profile(Request $request, Response $response) {
+        $currentPassword = htmlspecialchars(trim($request->getParam('currentPassword')));
+        $newPassword = htmlspecialchars(trim($request->getParam('newPassword')));
+
+        if(empty($currentPassword) || empty($newPassword)) {
+            $this->flash("Un ou plusieurs champs sont vides !", 'error');
+        } else {
+            $db_password = Utilisateur::select('mdp')->where('id', $_SESSION['id'])->first();
+
+            if(AuthController::verifyPassword($currentPassword, $db_password->mdp)) {
+                $hashedPassword = AuthController::hashPassword($newPassword);
+                Utilisateur::where('id', $_SESSION['id'])->update(['mdp' => $hashedPassword]);
+                $this->flash("Le mot de passe a bien été sauvegardé !");
+            } else {
+                $this->flash("Mot de passe actuel incorrect !", 'error');
+            }
+        }
+        return $this->redirect($response, 'profile');
     }
 
 }

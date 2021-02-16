@@ -64,7 +64,13 @@ $app->group('', function() {
     $this->post('/sequence/delete', PagesPostController::class . ':sequenceDelete')->setName('sequenceDelete');
 
     // Route : Modification d'une séquence (POST)
-    $this->post('/sequence/update', PagesPostController::class . ':sequenceUpdate')->setName('sequenceUpdate');  
+    $this->post('/sequence/update', PagesPostController::class . ':sequenceUpdate')->setName('sequenceUpdate'); 
+
+    // Route : Page de profil (GET)
+    $this->get('/profile', PagesGetController::class . ':profile')->setName('profile');
+
+    // Route : Page de profil (POST)
+    $this->post('/profile', PagesPostController::class . ':profile');
 
     // Route : Page de déconnexion (GET)
     $this->get('/logout', PagesGetController::class . ':logout')->setName('logout');
