@@ -9,6 +9,6 @@ class Utilisateur extends Model {
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    protected $fillable = ['nom', 'prenom', 'email', 'mdp'];
+    protected $fillable = ['nom', 'prenom', 'email', 'mdp', 'is_superadmin'];
 
 }

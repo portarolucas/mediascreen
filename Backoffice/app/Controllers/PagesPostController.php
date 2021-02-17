@@ -139,4 +139,30 @@ class PagesPostController extends Controller {
         return $this->redirect($response, 'profile');
     }
 
+    public function createUser(Request $request, Response $response) {
+        $firstname_user = htmlspecialchars(trim($request->getParam('name_user')));
+        $lastname_user = htmlspecialchars(trim($request->getParam('forname_user')));
+        $mail_user = htmlspecialchars(trim($request->getParam('mail_user')));
+        $password_user = htmlspecialchars(trim($request->getParam('mdp_user')));
+        $rank_user = htmlspecialchars(trim($request->getParam('rank_user')));
+
+        if(!filter_var($mail_user, FILTER_VALIDATE_EMAIL)) {
+            $this->flash('Cette adresse email est invalide !', 'error');
+        } else {
+            if(empty($firstname_user || $lastname_user || $mail_user || $password_user || $rank_user)) {
+                $this->flash('Veuillez renseigner tous les champs !', 'error');
+            } else {
+                $exist = Utilisateur::where('nom', '=', $mail_user)->count();
+                if($exist) {
+                    $this->flash('Cette adresse e-mail est déjà utilisée !', 'error');
+                } else {
+                    $password_hash = AuthController::hashPassword($password_user);
+                    Utilisateur::insert(['nom' => $firstname_user, 'prenom' => $lastname_user, 'email' => $mail_user, 'mdp' => $password_hash, 'is_superadmin' => $rank_user]);
+                    $this->flash("L'utilisateur a été créé avec succès !");
+                }
+            }
+        }        
+        return $this->redirect($response, 'createUser');
+    }
+
 }

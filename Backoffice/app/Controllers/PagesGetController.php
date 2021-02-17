@@ -58,4 +58,8 @@ class PagesGetController extends Controller {
         $this->render($response, 'Pages/Profile.twig');
     }
 
+    public function createUser(Request $request, Response $response) {
+        $this->render($response, 'Pages/CreateUser.twig');
+    }
+
 }

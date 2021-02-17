@@ -74,6 +74,13 @@ $app->group('', function() {
 
     // Route : Page de déconnexion (GET)
     $this->get('/logout', PagesGetController::class . ':logout')->setName('logout');
+
+    // Route : Page de création d'un utilisateur (GET)
+    $this->get('/create/user', PagesGetController::class . ':createUser')->setName('createUser');
+
+    // Route : Page de création d'un utilisateur (POST)
+    $this->post('/create/user', PagesPostController::class . ':createUser');
+
 })->add(new AuthMiddleware($container));
 
 $app->run();
