@@ -10,7 +10,8 @@ use Slim\Http\Response;
 class PagesGetController extends Controller {
 
     public function home(Request $request, Response $response) {
-        $this->render($response, 'Pages/Home.twig');
+        $is_superadmin = AuthController::isSuperAdmin();
+        $this->render($response, 'Pages/Home.twig', ['is_superadmin' => $is_superadmin]);
     }
 
     public function login(Request $request, Response $response) {

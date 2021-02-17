@@ -15,6 +15,7 @@ class AuthController extends Controller {
                 $_SESSION['nom'] = $user->nom;
                 $_SESSION['prenom'] = $user->prenom;
                 $_SESSION['email'] = $user->email;
+                $_SESSION['is_superadmin'] = $user->is_superadmin;
                 $status = true;
             }
         }
@@ -26,6 +27,7 @@ class AuthController extends Controller {
         unset($_SESSION['nom']);
         unset($_SESSION['prenom']);
         unset($_SESSION['email']);
+        unset($_SESSION['is_superadmin']);
     }
 
     public static function isLogged() {
@@ -42,6 +44,14 @@ class AuthController extends Controller {
 
     public static function hashPassword($password) {
         return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    public static function isSuperAdmin() {
+        if($_SESSION['is_superadmin']) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
