@@ -1,5 +1,5 @@
 // URL vers l'API
-const API = "http://localhost:8000";
+const API = "http://localhost:8001";
 
 // Récuperer le paramètre de l'URL
 let url = new URL(window.location.href);

@@ -1,6 +1,7 @@
 {% extends "Layout.twig" %}
 
 {% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <link rel="stylesheet" href="/assets/css/gestion_ecran.css">
 <style>
     .notification{
@@ -79,8 +80,11 @@
                                                 class="form-control update_nomEcran">
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">Veuillez saisir le temps de l'écran (en seconde)
-                                                :</label>
+                                            <label for="markdown_area">Veuillez saisir votre text markdown ci-dessous :</label>
+                                            <textarea class="form-control update_contenuEcran" id="markdown_area" name="markdown_area" rows="5">{{ screen.contenu }}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Veuillez saisir le temps de l'écran (en seconde):</label>
                                             <input class="form-control update_ecran_time" value="{{ screen.temps / 1000 }}" type="number">
                                         </div>
                                     </form>
@@ -125,7 +129,9 @@
 {% endblock %}
 
 {% block script %}
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script>
+var simplemde = new SimpleMDE({ element: document.getElementById("markdown_area") });
 function hideNotification() {
     $('#notification_block').fadeOut('500', () => {
         $('#notification_block').removeClass();

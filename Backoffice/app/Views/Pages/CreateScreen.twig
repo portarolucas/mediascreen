@@ -1,6 +1,7 @@
 {% extends "Layout.twig" %}
 
 {% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <link rel="stylesheet" href="/assets/css/new_ecran.css">
 {% endblock %}
 
@@ -32,11 +33,11 @@
         <input type="file" accept="video/mp4, video/webm" class="form-control-file" id="import_video">
     </div>
     <div class="form-group markdown-field" style="display: none;">
-        <label for="markdown_area">Veuillez saisir votre text markdown ci-dessous :</label>
+        <label for="markdown_area">Contenu de l'écran (en markdown) :</label>
         <textarea class="form-control" id="markdown_area" name="markdown_area" rows="5"></textarea>
     </div>
     <div class="form-group markdown-field" style="display: none;">
-        <label for="screen_time">Veuillez saisir le temps d'affichage de l'écran (en seconde) :</label>
+        <label for="screen_time">Temps d'affichage de l'écran (en seconde) :</label>
         <input class="form-control" type="number" id="screen_time" name="screen_time">
     </div>
     <button type="submit" class="btn btn-outline-success">Créer l'écran</button>
@@ -45,7 +46,10 @@
 {% endblock %}
 
 {% block script %}
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script>
+var simplemde = new SimpleMDE();
+
 function ecranType_func() {
     if ($('#screen_type').val() == "markdown") {
         $('.video-field').css("display", "none");
