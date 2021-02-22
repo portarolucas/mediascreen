@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Controllers\Auth\AuthController;
 use App\Models\Ecran;
 use App\Models\Sequence;
+use App\Models\Utilisateur;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -60,6 +61,11 @@ class PagesGetController extends Controller {
 
     public function createUser(Request $request, Response $response) {
         $this->render($response, 'Pages/CreateUser.twig');
+    }
+
+    public function users(Request $request, Response $response) {
+        $users = Utilisateur::select()->get();
+        $this->render($response, 'Pages/Users.twig', ['users' => $users]);
     }
 
 }

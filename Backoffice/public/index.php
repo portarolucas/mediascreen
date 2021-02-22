@@ -81,6 +81,16 @@ $app->group('', function() {
     // Route : Page de création d'un utilisateur (POST)
     $this->post('/create/user', PagesPostController::class . ':createUser');
 
+    // Route : Page de gestion des utilisaterus (GET)
+    $this->get('/users', PagesGetController::class . ':users')->setName('users');
+
+    // Route : Suppression d'un utilisateur (POST)
+    $this->post('/user/delete', PagesPostController::class . ':userDelete')->setName('userDelete');
+
+    // Route : Modification d'un utilisateur (POST)
+    $this->post('/user/update', PagesPostController::class . ':userUpdate')->setName('userUpdate');
+
+
 })->add(new AuthMiddleware($container));
 
 $app->run();

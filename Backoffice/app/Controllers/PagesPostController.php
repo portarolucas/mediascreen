@@ -152,7 +152,7 @@ class PagesPostController extends Controller {
             if(empty($firstname_user || $lastname_user || $mail_user || $password_user || $rank_user)) {
                 $this->flash('Veuillez renseigner tous les champs !', 'error');
             } else {
-                $exist = Utilisateur::where('nom', '=', $mail_user)->count();
+                $exist = Utilisateur::where('email', '=', $mail_user)->count();
                 if($exist) {
                     $this->flash('Cette adresse e-mail est déjà utilisée !', 'error');
                 } else {
@@ -163,6 +163,42 @@ class PagesPostController extends Controller {
             }
         }        
         return $this->redirect($response, 'createUser');
+    }
+
+    public function userDelete(Request $request, Response $response) {
+        $id = $request->getParam('id');
+        $exist = Utilisateur::where('id', '=', $id)->count();
+        
+        if(!$exist) {
+            return "L'utilisateur que vous essayez de supprimer n'existe pas !";
+        } else {
+            Utilisateur::where('id', '=', $id)->delete();
+            return "success";
+        }
+    }
+
+    public function userUpdate(Request $request, Response $response) {
+        $id = $request->getParam('id');
+        $firstname = htmlspecialchars(trim($request->getParam('newNom')));
+        $lastname = htmlspecialchars(trim($request->getParam('newPrenom')));
+        $email = htmlspecialchars(trim($request->getParam('newEmail')));
+        $rank = htmlspecialchars(trim($request->getParam('newRank')));
+    
+        $exist = Utilisateur::where('id', '=', $id)->count();
+    
+
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->flash('Cette adresse email est invalide !', 'error');
+        } else {
+            if(!$exist) {
+                return "L'utilisateur que vous essayez de modifier n'existe pas !";
+            } else {
+                Utilisateur::where('id', '=', $id)->update(['nom' => $firstname, 'prenom' => $lastname, 'email' => $email, 'is_superadmin' => $rank]);
+                return "success";
+            }
+        } 
+
     }
 
 }
