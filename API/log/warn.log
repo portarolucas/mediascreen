@@ -42,3 +42,5 @@
 [2021-02-16T17:47:16.418049+00:00] error.log.ERROR: GET http://localhost:8000/api/ecrans/1?token=7ec06a4bd4f7aebe15789ddd : malformed uri [] []
 [2021-02-16T17:57:01.152309+00:00] error.log.ERROR: GET http://localhost:8000/ : malformed uri [] []
 [2021-02-17T15:30:15.530973+01:00] error.log.ERROR: GET http://localhost:8001/ : malformed uri [] []
+[2021-02-18T14:52:46.293371+00:00] error.log.ERROR: GET http://localhost:8001/ : malformed uri [] []
+[2021-02-18T14:52:49.338822+00:00] error.log.ERROR: GET http://localhost:8001/ : malformed uri [] []

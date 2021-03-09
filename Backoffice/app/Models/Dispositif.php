@@ -10,4 +10,8 @@ class Dispositif extends Model {
     public $timestamps = false;
 
     protected $fillable = ['nom', 'description', 'lieu', 'id_sequence', 'token'];
+
+    public function sequence() {
+        return $this->belongsTo('App\Models\Sequence', 'id_sequence');
+    }
 }

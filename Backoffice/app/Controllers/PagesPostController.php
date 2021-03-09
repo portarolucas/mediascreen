@@ -188,17 +188,31 @@ class PagesPostController extends Controller {
         $name = htmlspecialchars(trim($request->getParam('newNom')));
         $description = htmlspecialchars(trim($request->getParam('newDescription')));
         $lieu = htmlspecialchars(trim($request->getParam('newLieu')));
+        $id_sequence = htmlspecialchars(trim($request->getParam('newIdSequence')));
 
         $exist = Dispositif::where('id', '=', $id)->count();
 
         if(!$exist) {
             return "Le dispositif que vous essayez de modifier n'existe pas !";
         } else {
-            Dispositif::where('id', '=', $id)->update(['nom' => $name, 'description' => $description, 'lieu' => $lieu]);
+            Dispositif::where('id', '=', $id)->update(['nom' => $name, 'description' => $description, 'lieu' => $lieu, 'id_sequence' => $id_sequence]);
             return "success";
         }
     }
-    
+
+    public function deviceDelete(Request $request, Response $response) {
+        $id = $request->getParam('id');
+
+        $exist = Dispositif::where('id', '=', $id)->count();
+
+        if(!$exist) {
+            return "Le dispositif que vous essayez de modifier n'existe pas !";
+        } else {
+            Dispositif::where('id', '=', $id)->delete();
+            return "success";
+        }
+    }
+
     public function userDelete(Request $request, Response $response) {
         $id = $request->getParam('id');
         $exist = Utilisateur::where('id', '=', $id)->count();

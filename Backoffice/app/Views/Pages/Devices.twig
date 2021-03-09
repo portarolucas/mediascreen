@@ -39,15 +39,15 @@
             <td class="panel_emplacement"><span class="editable">{{ device.lieu }}</span></td>
             <td class="panel_token">{{ device.token }}</td>
             <td class="panel_update">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editdevice_{{ device.id }}">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editDevice_{{ device.id }}">
                     <i class="far fa-edit"></i>
                 </button>
-                <div class="modal fade exampleModalClass" id="editdevice_{{ device.id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="editdeviceLabel_{{ device.id }}">
+                <div class="modal fade exampleModalClass" id="editDevice_{{ device.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="editDeviceLabel_{{ device.id }}">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="editdeviceLabel_{{ device.id }}">Modifier le dispositif</h4>
+                                <h4 class="modal-title" id="editDeviceLabel_{{ device.id }}">Modifier le dispositif</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span
                                         aria-hidden="true">×</span></button>
                             </div>
@@ -68,6 +68,16 @@
                                         <input type="text" value="{{ device.lieu }}"
                                             class="form-control update_lieu">
                                     </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Séquence associée</label>
+                                        <select class="custom-select update_sequence">
+                                        {% for sequence in sequences %}
+                                            <option value="{{ sequence.id }}"
+                                            {% if sequence.id == device.sequence.id %} selected {% endif %}
+                                            >{{ sequence.nom }}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -81,13 +91,13 @@
             </td>
             <td class="panel_delete">
                 <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal"
-                    data-target="#deletedevice_{{ device.id }}">
-                <div class="modal fade" id="deletedevice_{{ device.id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="deletedeviceLabel_{{ device.id }}" aria-hidden="true">
+                    data-target="#deleteDevice_{{ device.id }}">
+                <div class="modal fade" id="deleteDevice_{{ device.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="deleteDeviceLabel_{{ device.id }}" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="deletedeviceLabel_{{ device.id }}">Supprimer un dispositif :</h4>
+                                <h4 class="modal-title" id="deleteDeviceLabel_{{ device.id }}">Supprimer un dispositif :</h4>
                             </div>
                             <div class="modal-body">
                                 <p>Êtes-vous sûr de vouloir supprimer le dispositif : {{ device.nom }} ?</p>
@@ -130,7 +140,7 @@ function deleteDevice(id, leBtn) {
     let http = new XMLHttpRequest();
     let params =
         'id=' + id;
-    http.open('POST', '{{ path_for('') }}', true);
+    http.open('POST', '{{ path_for('deviceDelete') }}', true);
 
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     http.onreadystatechange = function () {
@@ -154,8 +164,9 @@ function updateDevice(id, leBtn) {
     let nom = $(bodyModal).find('.update_nom').val();
     let description = $(bodyModal).find('.update_description').val();
     let lieu = $(bodyModal).find('.update_lieu').val();
+    let id_sequence = $(bodyModal).find('.update_sequence').val();
 
-    if (id, nom) {
+    if (id, nom, description, lieu, id_sequence) {
         let model = $(leBtn).parents().closest('.modal');
         let lineUpdate = $(leBtn).parents().closest('tr');
         let http = new XMLHttpRequest();
@@ -164,8 +175,9 @@ function updateDevice(id, leBtn) {
             'id=' + id +
             '&newNom=' + nom +
             '&newDescription=' + description +
-            '&newLieu=' + lieu;
-        http.open('POST', '{{ path_for('') }}', true);
+            '&newLieu=' + lieu +
+            '&newIdSequence=' + id_sequence;
+        http.open('POST', '{{ path_for('deviceUpdate') }}', true);
 
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         http.onreadystatechange = function () {
@@ -176,7 +188,7 @@ function updateDevice(id, leBtn) {
                     $(model).modal('hide');
                     showNotification('success', "Succès : Le dispositif : " + nom + " a bien été modifié.");
                 } else {
-                    createMessageAlert('red', 'Erreur', http.responseText);
+                    showNotification('danger', http.responseText);
                 }
             }
         }

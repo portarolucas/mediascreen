@@ -45,8 +45,9 @@ class PagesGetController extends Controller {
     }
 
     public function devices(Request $request, Response $response) {
-        $devices = Dispositif::select()->get();
-        $this->render($response, 'Pages/Devices.twig', ['devices' => $devices]);
+        $devices = Dispositif::select()->with('sequence')->get();
+        $sequences = Sequence::select()->get();
+        $this->render($response, 'Pages/Devices.twig', ['devices' => $devices, 'sequences' => $sequences]);
     }
 
     public function sequences(Request $request, Response $response) {

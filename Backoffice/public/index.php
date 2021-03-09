@@ -92,8 +92,11 @@ $app->group('', function() {
 
     // Route : Modification d'un dispositif (POST)
     $this->post('/device/update', PagesPostController::class . ':deviceUpdate')->setName('deviceUpdate');
-    // Route : Page de gestion des utilisaterus (GET)
-    
+
+    // Route : Suppression d'un dispositif (POST)
+    $this->post('/device/delete', PagesPostController::class . ':deviceDelete')->setName('deviceDelete');
+
+    // Route : Page de gestion des utilisateurs (GET)
     $this->get('/users', PagesGetController::class . ':users')->setName('users');
 
     // Route : Suppression d'un utilisateur (POST)
