@@ -81,6 +81,18 @@ $app->group('', function() {
     // Route : Page de création d'un utilisateur (POST)
     $this->post('/create/user', PagesPostController::class . ':createUser');
 
+    // Route : Page de gestion des dispositifs (GET)
+    $this->get('/devices', PagesGetController::class . ':devices')->setName('devices');
+
+    // Route : Page de création d'un dispositif d'affichage (GET)
+    $this->get('/create/device', PagesGetController::class . ':createDevice')->setName('createDevice');
+
+    // Route : Page de création d'un dispositif d'affichage (POST)
+    $this->post('/create/device', PagesPostController::class . ':createDevice')->setName('createDevice');
+
+    // Route : Modification d'un dispositif (POST)
+    $this->post('/device/update', PagesPostController::class . ':deviceUpdate')->setName('deviceUpdate');
+
 })->add(new AuthMiddleware($container));
 
 $app->run();

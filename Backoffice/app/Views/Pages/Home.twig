@@ -17,7 +17,20 @@
         </a>
     </div>
 
-{% if is_superadmin %}
+    <div class="col-4 box">
+        <h1>Dispositifs d'affichage</h1>
+        <hr>
+        <a href="{{ path_for('devices') }}" class="btn btn-outline-warning btn-sm">
+            Gestion des dispositifs
+        </a>
+        <a href="{{ path_for('createDevice') }}" class="btn btn-outline-success btn-sm">
+            Nouveau dispositif
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-around">
+    {% if is_superadmin %}
     <div class="col-4 box">
         <h1>Utilisateurs</h1>
         <hr>

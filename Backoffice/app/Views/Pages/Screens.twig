@@ -129,9 +129,7 @@
 {% endblock %}
 
 {% block script %}
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script>
-var simplemde = new SimpleMDE({ element: document.getElementById("markdown_area") });
 function hideNotification() {
     $('#notification_block').fadeOut('500', () => {
         $('#notification_block').removeClass();
@@ -175,6 +173,7 @@ function deleteEcran(id, leBtn) {
 function updateEcran(id, leBtn) {
     let bodyModal = $(leBtn).parent().prev('.modal-body');
     let nom = $(bodyModal).find('.update_nomEcran').val();
+    let content = $(bodyModal).find('.update_contenuEcran').val();
     let ecranTime = $(bodyModal).find('.update_ecran_time').val();
 
     if (nom && ecranTime) {
@@ -185,6 +184,7 @@ function updateEcran(id, leBtn) {
         let params =
             'id=' + id +
             '&newNom=' + nom +
+            '&newContent=' + content +
             '&newEcranTime=' + ecranTime;
         http.open('POST', '{{ path_for('screenUpdate') }}', true);
 

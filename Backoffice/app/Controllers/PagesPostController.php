@@ -6,6 +6,7 @@ use Slim\Http\Response;
 use App\Models\Ecran;
 use App\Models\Sequence;
 use App\Controllers\Auth\AuthController;
+use App\Models\Dispositif;
 use App\Models\Utilisateur;
 use Illuminate\Container\Util;
 
@@ -80,6 +81,7 @@ class PagesPostController extends Controller {
     public function screenUpdate(Request $request, Response $response) {
         $id = $request->getParam('id');
         $name = htmlspecialchars(trim($request->getParam('newNom')));
+        $content = htmlspecialchars(trim($request->getParam('newContent')));
         $temps = htmlspecialchars(trim($request->getParam('newEcranTime')));
 
         $exist = Ecran::where('id', '=', $id)->count();
@@ -87,7 +89,7 @@ class PagesPostController extends Controller {
         if(!$exist) {
             return "L'écran que vous essayez de modifier n'existe pas !";
         } else {
-            Ecran::where('id', '=', $id)->update(['nom' => $name, 'temps' => $temps * 1000]);
+            Ecran::where('id', '=', $id)->update(['nom' => $name, 'contenu' => $content, 'temps' => $temps * 1000]);
             return "success";
         }
     }
@@ -163,6 +165,38 @@ class PagesPostController extends Controller {
             }
         }        
         return $this->redirect($response, 'createUser');
+    }
+
+    public function createDevice(Request $request, Response $response) {
+        $name = htmlspecialchars(trim($request->getParam('nom')));
+        $description = htmlspecialchars(trim($request->getParam('description')));
+        $lieu = htmlspecialchars(trim($request->getParam('lieu')));
+        $id_sequence = htmlspecialchars(trim($request->getParam('id_sequence')));
+        $token = bin2hex(random_bytes(12));
+
+        if(empty($name) || empty($description) || empty($lieu) || empty($id_sequence)) {
+            $this->flash('Un ou plusieurs champs sont vide(s) !', 'error');
+        } else {
+            Dispositif::insert(['nom' => $name, 'description' => $description, 'lieu' => $lieu, 'id_sequence' => $id_sequence, 'token' => $token]);
+            $this->flash("Le dispositif a été créé avec succès !");
+        }
+        return $this->redirect($response, 'createDevice');
+    }
+
+    public function deviceUpdate(Request $request, Response $response) {
+        $id = $request->getParam('id');
+        $name = htmlspecialchars(trim($request->getParam('newNom')));
+        $description = htmlspecialchars(trim($request->getParam('newDescription')));
+        $lieu = htmlspecialchars(trim($request->getParam('newLieu')));
+
+        $exist = Dispositif::where('id', '=', $id)->count();
+
+        if(!$exist) {
+            return "Le dispositif que vous essayez de modifier n'existe pas !";
+        } else {
+            Dispositif::where('id', '=', $id)->update(['nom' => $name, 'description' => $description, 'lieu' => $lieu]);
+            return "success";
+        }
     }
 
 }

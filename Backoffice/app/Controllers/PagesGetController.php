@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Controllers\Auth\AuthController;
+use App\Models\Dispositif;
 use App\Models\Ecran;
 use App\Models\Sequence;
 use Slim\Http\Request;
@@ -35,6 +36,16 @@ class PagesGetController extends Controller {
         } else {
             $this->render($response, 'Pages/CreateScreen.twig', ['sequence' => $sequence, 'id' => $id]);
         }
+    }
+
+    public function createDevice(Request $request, Response $response) {
+        $sequences = Sequence::select()->get();
+        $this->render($response, 'Pages/CreateDevice.twig', ['sequences' => $sequences]);
+    }
+
+    public function devices(Request $request, Response $response) {
+        $devices = Dispositif::select()->get();
+        $this->render($response, 'Pages/Devices.twig', ['devices' => $devices]);
     }
 
     public function sequences(Request $request, Response $response) {
