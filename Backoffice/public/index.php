@@ -92,6 +92,16 @@ $app->group('', function() {
 
     // Route : Modification d'un dispositif (POST)
     $this->post('/device/update', PagesPostController::class . ':deviceUpdate')->setName('deviceUpdate');
+    // Route : Page de gestion des utilisaterus (GET)
+    
+    $this->get('/users', PagesGetController::class . ':users')->setName('users');
+
+    // Route : Suppression d'un utilisateur (POST)
+    $this->post('/user/delete', PagesPostController::class . ':userDelete')->setName('userDelete');
+
+    // Route : Modification d'un utilisateur (POST)
+    $this->post('/user/update', PagesPostController::class . ':userUpdate')->setName('userUpdate');
+
 
 })->add(new AuthMiddleware($container));
 
