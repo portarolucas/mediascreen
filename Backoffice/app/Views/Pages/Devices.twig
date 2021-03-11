@@ -26,7 +26,8 @@
         <tr>
             <th style="width: 30%;">Nom du dispositif</th>
             <th style="width: 25%;">Emplacement</th>
-            <th style="width: 35%;">Token</th>
+            <th style="width: 25%;">Séquence associée</th>
+            <th style="width: 25%;">Token</th>
             <th style="width: 5%;"></th>
             <th style="width: 5%;"></th>
         </tr>
@@ -37,6 +38,7 @@
             <tr>
             <td class="panel_nom"><span class="editable">{{ device.nom }}</span></td>
             <td class="panel_emplacement"><span class="editable">{{ device.lieu }}</span></td>
+            <td class="panel_token">{{ device.sequence.nom }}</td>
             <td class="panel_token">{{ device.token }}</td>
             <td class="panel_update">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editDevice_{{ device.id }}">
