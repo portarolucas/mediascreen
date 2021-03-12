@@ -7,6 +7,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use MediaScreenAPI\Controller\Controller as API;
 use MediaScreenAPI\Middlewares\TokenMiddleware;
 
+
 $settings       = require_once __DIR__ .'/../config/settings.php';
 $dependencies   = require_once __DIR__ .'/../config/dependencies.php';
 $errors         = require_once __DIR__ .'/../config/errors.php';
@@ -20,6 +21,13 @@ $db->bootEloquent();
 
 $c = new \Slim\Container(array_merge($settings, $dependencies, $errors));
 $app = new \Slim\App($c);
+
+
+$app->add(MediaScreenAPI\Middlewares\Cors::class . ':checkAndAddCorsHeaders');
+
+$app->options('/{routes:.+}', function(Request $rq, Response $rs, array $args) {
+    return $rs;
+});
 
 $app->group('', function() {
     // Route : récupérations de toutes les séquences

@@ -44,3 +44,5 @@
 [2021-02-17T15:30:15.530973+01:00] error.log.ERROR: GET http://localhost:8001/ : malformed uri [] []
 [2021-02-18T14:52:46.293371+00:00] error.log.ERROR: GET http://localhost:8001/ : malformed uri [] []
 [2021-02-18T14:52:49.338822+00:00] error.log.ERROR: GET http://localhost:8001/ : malformed uri [] []
+[2021-03-11T16:54:14.440248+00:00] error.log.ERROR: GET http://localhost:8001/ : malformed uri [] []
+[2021-03-11T16:56:27.318128+00:00] error.log.ERROR: GET http://localhost:8001/get : malformed uri [] []
