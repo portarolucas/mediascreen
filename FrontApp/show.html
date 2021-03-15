@@ -10,5 +10,21 @@
     
     <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        function getFullScreenElement() {
+            return document.fullscreenElement 
+                || document.webkitFullscreenElement
+                || document.mozFullscreenElement
+                || document.msFullscreenElement;
+            }
+
+        document.addEventListener("dblclick",() => {
+            document.documentElement.requestFullscreen().catch((e)=> {
+                console.log(e);
+            });
+        })
+        
+            
+    </script>
 </body>
 </html>

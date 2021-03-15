@@ -51,3 +51,4 @@ function wait(contenu, temps, screens) {
 function refresh() {
     window.location.reload();
 }
+// full screen

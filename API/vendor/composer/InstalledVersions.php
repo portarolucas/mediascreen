@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '37039b3b5f0253f3ef92e0cf34ef44d2704ba4bb',
+    'reference' => '95983543c81f31ac929eb7f3a503573bb2c9b9cd',
     'name' => 'ciasie/mediascreen',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '37039b3b5f0253f3ef92e0cf34ef44d2704ba4bb',
+      'reference' => '95983543c81f31ac929eb7f3a503573bb2c9b9cd',
     ),
     'doctrine/inflector' => 
     array (
