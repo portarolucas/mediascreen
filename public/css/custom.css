@@ -1,0 +1,80 @@
+/* your styles go here */
+
+.box-image-text .image {
+  min-height: 200px;
+  max-height: 200px;
+}
+
+.box-simple {
+  min-height: 230px;
+}
+
+#used_language .owl-wrapper-outer .owl-wrapper{
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+#socialLucas{
+  display:flex;
+  justify-content: flex-start;
+  align-content: center;
+  flex-wrap: nowrap;
+}
+
+#socialLucas a img{
+  height: 30px;
+  width: 30px;
+  filter: gray;
+  -webkit-filter: grayscale(100%);
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+  margin-right: 20px;
+}
+
+#socialLucas a img:hover{
+  filter: none;
+  -webkit-filter: none;
+}
+
+#openVideoBoxBtn{
+  position: relative;
+  width: max-content;
+}
+
+#openVideoBoxBtn:hover .icon{
+  -webkit-transform: translate(-50%, -50%) scale(1.1) !important;
+  -ms-transform: translate(-50%, -50%) scale(1.1) !important;
+  -o-transform: translate(-50%, -50%) scale(1.1) !important;
+  transform: translate(-50%, -50%) scale(1.1) !important;
+}
+
+#openVideoBoxBtn img{
+  filter: grayscale(100%);
+  border: 1px solid black;
+}
+
+#openVideoBoxBtn .icon{
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fec608;
+  border: 2px solid #fec608;
+  border-radius: 90px;
+  text-align: center;
+  font-weight: 400;
+  line-height: 100px;
+  transition: all 0.2s ease-out;
+}
+
+#openVideoBoxBtn .icon i{
+  font-size: 28px;
+}
+
+.col-md-4 .box-simple{
+  margin-bottom: 0;
+}
