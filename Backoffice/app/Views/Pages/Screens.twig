@@ -1,0 +1,211 @@
+{% extends "Layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<link rel="stylesheet" href="/assets/css/gestion_ecran.css">
+<style>
+    .notification{
+      position: fixed;
+      bottom: 0;
+      left:0;
+      width: 100%;
+    }
+
+    {% if screens is empty %}
+        table {
+            display: none;
+        }
+    {% endif %}
+  </style>
+{% endblock %}
+
+{% block content %}
+<div id="notification_block" class="notification" style="z-index: 999;display: none;">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hideNotification()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p></p>
+</div>
+
+<h1>Écrans de la séquence : {{ sequence.nom }}</h1>
+
+<a href="{{ path_for('createScreen', {id: id}) }}" class="btn btn-primary">Créer un écran</a>
+
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th style="width: 25%;">Nom de l'écran</th>
+            <th style="width: 15%;">Type d'écran</th>
+            <th style="width: 15%;">Durée</th>
+            <th style="width: 10%;">Auteur</th>
+            <th style="width: 5%;"></th>
+            <th style="width: 5%;"></th>
+        </tr>
+    </thead>
+
+    {% if screens is empty %}
+        Aucun écrans associée à la séquence {{ sequence.nom }} !
+    {% else %}
+        <tbody>
+    {% for screen in screens %}
+            <tr>
+                <td class="panel_nomEcran">{{ screen.nom }}</td>
+                <td class="panel_typeEcran">
+                {% if screen.id_type == 1 %}
+                    Markdown
+                {% elseif screen.id_type == 2 %}
+                    Vidéo
+                {% endif %}
+                </td>
+                <td class="panel_duree">{{ screen.temps / 1000 }}s</td>
+                <td class="panel_auteur">{{ screen.author.prenom }} {{ screen.author.nom }}</td>
+                <td class="panel_update">
+                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editEcran_{{ screen.id }}">
+                        <i class="far fa-edit"></i>
+                    </button>
+                    <div class="modal fade exampleModalClass" id="editEcran_{{ screen.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="editEcranLabel_{{ screen.id }}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="editEcranLabel_{{ screen.id }}">Modifier l'écran</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span
+                                            aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="control-label">Nom écran :</label>
+                                            <input type="text" value="{{ screen.nom }}"
+                                                class="form-control update_nomEcran">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="markdown_area">Veuillez saisir votre text markdown ci-dessous :</label>
+                                            <textarea class="form-control update_contenuEcran" id="markdown_area" name="markdown_area" rows="5">{{ screen.contenu }}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Veuillez saisir le temps de l'écran (en seconde):</label>
+                                            <input class="form-control update_ecran_time" value="{{ screen.temps / 1000 }}" type="number">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-dark" onclick="updateEcran({{ screen.id }}, this)">Modifier
+                                        l'écran</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="panel_delete">
+                    <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal"
+                        data-target="#deleteEcran_{{ screen.id }}">
+                    <div class="modal fade" id="deleteEcran_{{ screen.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="deleteEcranLabel_{{ screen.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="deleteEcranLabel_{{ screen.id }}">Supprimer un écran :</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Êtes-vous sûr de vouloir supprimer la écran : {{ screen.nom }}?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-danger btn-ok"
+                                        onclick="deleteEcran({{ screen.id }}, this)">Supprimer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+
+    </tbody>
+</table>
+{% endblock %}
+
+{% block script %}
+<script>
+function hideNotification() {
+    $('#notification_block').fadeOut('500', () => {
+        $('#notification_block').removeClass();
+    });
+}
+
+function showNotification(libelle_bootstrap, message) {
+    hideNotification();
+    $('#notification_block p').text(message)
+    $('#notification_block').addClass("notification")
+    $('#notification_block').addClass('alert alert-' + libelle_bootstrap)
+    $('#notification_block').fadeIn('500');
+}
+
+function deleteEcran(id, leBtn) {
+    let model = $(leBtn).parents().closest('.modal');
+    let lineDelet = $(leBtn).parents().closest('tr');
+
+    let http = new XMLHttpRequest();
+    let params = 'id=' + id;
+    http.open('POST', '{{ path_for('screenDelete') }}', true);
+
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    http.onreadystatechange = function () {
+        if (http.readyState == 4 && http.status == 200) {
+            //   console.log(http.responseText);
+            if (http.responseText == 'success') {
+                $(model).modal('hide');
+                showNotification('success', "Succès : L'écran a bien été supprimé.");
+                $(lineDelet).hide('slow', function () {
+                    $(lineDelet).remove();
+                });
+            } else {
+                showNotification('danger', 'Erreur : ', http.responseText);
+            }
+        }
+    }
+    http.send(params);
+}
+
+function updateEcran(id, leBtn) {
+    let bodyModal = $(leBtn).parent().prev('.modal-body');
+    let nom = $(bodyModal).find('.update_nomEcran').val();
+    let content = $(bodyModal).find('.update_contenuEcran').val();
+    let ecranTime = $(bodyModal).find('.update_ecran_time').val();
+
+    if (nom && ecranTime) {
+        let model = $(leBtn).parents().closest('.modal');
+        let lineUpdate = $(leBtn).parents().closest('tr');
+        let http = new XMLHttpRequest();
+
+        let params =
+            'id=' + id +
+            '&newNom=' + nom +
+            '&newContent=' + content +
+            '&newEcranTime=' + ecranTime;
+        http.open('POST', '{{ path_for('screenUpdate') }}', true);
+
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        http.onreadystatechange = function () {
+            if (http.readyState == 4 && http.status == 200) {
+                  console.log(http.responseText);
+                if (http.responseText == 'success') {
+                    $(lineUpdate).find('.panel_nomEcran').text(nom);
+                    $(lineUpdate).find('.panel_duree').text(ecranTime + "s");
+                    $(model).modal('hide');
+                    showNotification('success', "Succès : L'écran : " + nom + " a bien été modifié.");
+                } else {
+                    showNotification('danger', 'Erreur : ', http.responseText);
+                }
+            }
+        }
+        http.send(params);
+    } else {
+        alert("Une erreur est survenue : des champs sont manquants, introuvable, ou incomplet \n\rSi le problème persiste actualisez la page ou contacter l'administrateur du site.");
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Gestion des écrans - MediaScreen</title>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://unpkg.com/browse/normalize.css@8.0.1/normalize.css">
+  <link rel="stylesheet" href="./css/gestion_ecran.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
+    <div class="container">
+      <a class="navbar-brand" href="admin_panel.html">Retour</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <i class="fas fa-user-cog"></i>
+            <a class="nav-link" href="#">Lucaas855</a>
+          </li>
+          <li class="nav-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <a class="nav-link" href="#">Déconnexion</a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+  <div class="main-content">
+    <div class="container">
+      <h1>Gestion écran</h1>
+      <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th style="width: 5%;">ID</th>
+            <th style="width: 25%;">Nom écran</th>
+            <th style="width: 25%;">Séquence associé</th>
+            <th style="width: 15%;">Type d'écran</th>
+            <th style="width: 10%;">Durée</th>
+            <th style="width: 10%;">Auteur</th>
+            <th style="width: 5%;"></th>
+            <th style="width: 5%;"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="panel_ID">1</td>
+            <td class="panel_nomEcran">Publicité Caf&Co</td>
+            <td class="panel_seqAssocie">Écran salle 2</td>
+            <td class="panel_typeEcran">Markdown</td>
+            <td class="panel_duree">366s</td>
+            <td class="panel_auteur">Lucaas855</td>
+            <td class="panel_update">
+              <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editEcran_1">
+                <i class="far fa-edit"></i>
+              </button>
+              <div class="modal fade exampleModalClass" id="editEcran_1" tabindex="-1" role="dialog" aria-labelledby="editEcranLabel_1">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="editEcranLabel_1">Modifier l'écran</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="form-group">
+                          <label class="control-label">Nom écran :</label>
+                          <input type="text" value="Publicité Caf&Co" class="form-control update_nomEcran">
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label">Séquence associé :</label>
+                          <select class="form-control update_sequenceEcran">
+                            <option value="1" selected>[ID:1] Écran salle 2</option>
+                            <option value="2">[ID:2] Écran salle de cinéma</option>
+                            <option value="3">[ID:3] Écran salle de pause (coin café)</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label">Veuillez saisir le temps de l'écran (en seconde) :</label>
+                          <input class="form-control update_ecran_time" value="366" type="number">
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                      <button type="button" class="btn btn-dark" onclick="updateEcran(1, this)">Modifier l'écran</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="panel_delete">
+              <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal" data-target="#deleteEcran_1">
+              <div class="modal fade" id="deleteEcran_1" tabindex="-1" role="dialog" aria-labelledby="deleteEcranLabel_1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="deleteEcranLabel_1">Supprimer un écran :</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>Êtes-vous sûr de vouloir supprimer la écran : Publicité Caf&Co ?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                      <button type="button" class="btn btn-danger btn-ok" onclick="deleteEcran(1, this)">Supprimer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="panel_ID">2</td>
+            <td class="panel_nomEcran">Nouveauté magasin</td>
+            <td class="panel_seqAssocie">Écran salle de pause (coin café)</td>
+            <td class="panel_typeEcran">Vidéo</td>
+            <td class="panel_duree">-</td>
+            <td class="panel_auteur">Evan92i</td>
+            <td class="panel_update">
+              <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editEcran_2">
+                <i class="far fa-edit"></i>
+              </button>
+              <div class="modal fade exampleModalClass" id="editEcran_2" tabindex="-1" role="dialog" aria-labelledby="editEcranLabel_2">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="editEcranLabel_2">Modifier l'écran</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="form-group">
+                          <label class="control-label">Nom écran :</label>
+                          <input type="text" value="Nouveauté magasin" class="form-control update_nomEcran">
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label">Séquence associé :</label>
+                          <select class="form-control update_sequenceEcran">
+                            <option value="1">[ID:1] Écran salle 2</option>
+                            <option value="2">[ID:2] Écran salle de cinéma</option>
+                            <option value="3" selected>[ID:3] Écran salle de pause (coin café)</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label">Veuillez saisir le temps de l'écran (en seconde) :</label>
+                          <input class="form-control update_ecran_time" disabled value="" type="number">
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                      <button type="button" class="btn btn-dark" onclick="updateEcran(2, this)">Modifier l'écran</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="panel_delete">
+              <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal" data-target="#deleteEcran_2">
+              <div class="modal fade" id="deleteEcran_2" tabindex="-1" role="dialog" aria-labelledby="deleteEcranLabel_2" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="deleteEcranLabel_2">Supprimer un écran :</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>Êtes-vous sûr de vouloir supprimer la écran : Nouveauté magasin ?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                      <button type="button" class="btn btn-danger btn-ok" onclick="deleteEcran(2, this)">Supprimer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script type="text/javascript">
+  function delEcran(id, leBtn)
+  {
+      var model = $(leBtn).parents().closest('.modal');
+      var lineDelet = $(leBtn).parents().closest('tr');
+
+      var http = new XMLHttpRequest();
+      var params =
+          'id=' + id;
+      http.open('POST', './../public/app/resources/model/ajax_gestionEcran.php?delEcran', true);
+
+      http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      http.onreadystatechange = function()
+      {
+          if(http.readyState == 4 && http.status == 200)
+          {
+              if(http.responseText == 'success')
+              {
+                  $(model).modal('hide');
+                  createMessageAlert('green', 'Succès', "L'écran a bien été supprimé.");
+                  $(lineDelet).hide('slow', function(){ $(lineDelet).remove(); });
+              }
+              else
+              {
+                  createMessageAlert('red', 'Erreur', http.responseText);
+              }
+          }
+      }
+      http.send(params);
+  }
+  function updateEcran(id, leBtn){
+    let bodyModal = $(leBtn).parent().prev('.modal-body');
+    let nom = $(bodyModal).find('.update_nomEcran').val();
+    let sequenceAssocie = $(bodyModal).find('.update_sequenceEcran').val();
+    let sequenceAssocieText = $(bodyModal).find('.update_sequenceEcran').text();
+    let ecranTime = $(bodyModal).find('.update_ecran_time').val();
+
+    if(nom && sequenceAssocie && ecranTime) {
+      let model = $(leBtn).parents().closest('.modal');
+      let lineUpdate = $(leBtn).parents().closest('tr');
+      let http = new XMLHttpRequest();
+
+      let params =
+      'id=' + id
+      + '&newNom=' + nom
+      + '&newSequence=' + sequenceAssocie
+      + '&newEcranTime=' + ecranTime;
+      http.open('POST', './../public/app/resources/model/ajax_gestionEcran.php?updateEcran', true);
+
+      http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      http.onreadystatechange = function () {
+        if (http.readyState == 4 && http.status == 200) {
+          let rep = JSON.parse(http.responseText);
+          if (rep.reponse_status == 'success') {
+            //UPDATE VALUE ON PAGE
+            $(lineUpdate).find('.panel_nomEcran').text(nom);
+            $(lineUpdate).find('.panel_seqAssocie').text(sequenceAssocieText);
+            $(lineUpdate).find('.panel_duree').text(ecranTime);
+            $(model).modal('hide');
+            createMessageAlert('blue', 'Succès', "L'écran : " + nom + " a bien été mis à jour.")
+          } else if (rep.reponse_status == 'error') {
+            createMessageAlert('red', 'Erreur SQL', rep.error_msg)
+          } else {
+            createMessageAlert('red', 'Erreur', "Une erreur inconnue a été rencontrée, veuillez réessayer.")
+          }
+        }
+      }
+      http.send(params);
+    }
+    else
+    {
+      alert("Une erreur est survenue : des champs sont manquants, introuvable, ou incomplet \n\rSi le problème persiste actualisez la page ou contacter l'administrateur du site");
+    }
+  }
+  </script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

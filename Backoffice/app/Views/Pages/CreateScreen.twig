@@ -1,0 +1,63 @@
+{% extends "Layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<link rel="stylesheet" href="/assets/css/new_ecran.css">
+{% endblock %}
+
+{% block content %}
+<h1>Création d'un écran pour la séquence : {{ sequence.nom }}</h1>
+
+<div class="box">
+    <form action="{{ path_for('createScreen', {id: id}) }}" method="post">
+    <div class="form-group">
+        <label for="screen_name" class="form-label">Nom de l'écran</label>
+        <input type="text" class="form-control" id="screen_name" name="screen_name" required>
+    </div>
+    <div class="form-group">
+        <label for="sequence_associee">Séquence associée</label>
+        <select class="form-control" id="sequence_associee" name="sequence_associee">
+            <option disabled selected value="{{ sequence.id }}">{{ sequence.nom }}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="screen_type">Type d'écran</label>
+        <select class="form-control" onchange="ecranType_func()" id="screen_type" name="screen_type">
+            <option disabled selected>Séléctionner un type</option>
+            <option value="markdown">Markdown</option>
+            <option value="video">Vidéo</option>
+        </select>
+    </div>
+    <div class="form-group video-field" style="display: none;">
+        <label for="import_video">Importer une vidéo</label>
+        <input type="file" accept="video/mp4, video/webm" class="form-control-file" id="import_video">
+    </div>
+    <div class="form-group markdown-field" style="display: none;">
+        <label for="markdown_area">Contenu de l'écran (en markdown) :</label>
+        <textarea class="form-control" id="markdown_area" name="markdown_area" rows="5"></textarea>
+    </div>
+    <div class="form-group markdown-field" style="display: none;">
+        <label for="screen_time">Temps d'affichage de l'écran (en seconde) :</label>
+        <input class="form-control" type="number" id="screen_time" name="screen_time">
+    </div>
+    <button type="submit" class="btn btn-outline-success">Créer l'écran</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script>
+var simplemde = new SimpleMDE();
+
+function ecranType_func() {
+    if ($('#screen_type').val() == "markdown") {
+        $('.video-field').css("display", "none");
+        $('.markdown-field').css("display", "block");
+    } else if ($('#screen_type').val() == "video") {
+        $('.markdown-field').css("display", "none");
+        $('.video-field').css("display", "block");
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "Layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/css/new_sequence.css">
+{% endblock %}
+
+{% block content %}
+<h1>Création d'un utilisateur</h1>
+
+{% if flash.success %}
+<div class="alert alert-success" role="alert">
+  {{ flash.success }}
+</div>
+{% endif %}
+
+{% if flash.error %}
+<div class="alert alert-danger" role="alert">
+  {{ flash.error }}
+</div>
+{% endif %}
+
+<div class="box">
+    <form action="{{ path_for('createUser') }}" method="post">
+    <div class="mb-3">
+        <label for="name_user" class="form-label">Nom</label>
+        <input type="text" class="form-control" id="name_user" name="name_user" required>
+    </div>
+    <div class="mb-3">
+        <label for="forname_user" class="form-label">Prenom</label>
+        <input type="text" class="form-control" id="forname_user" name="forname_user" required>
+    </div>
+    <div class="mb-3">
+        <label for="mail_user" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="mail_user" name="mail_user" required>
+    </div>
+    <div class="mb-3">
+        <label for="mdp_user" class="form-label">Mot de passe</label>
+        <input type="password" class="form-control" id="mdp_user" name="mdp_user" required>
+    </div>
+    <div class="mb-3">
+        <label for="rank_user" class="form-label">Rôle</label>
+        <select class="custom-select" name="rank_user" id="rank_user">
+            <option value="0" selected>Admin</option>
+            <option value="1">Super-Admin</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-outline-success btn-sm">Créer l'utilisateur'</button>
+    </form>
+</div>
+{% endblock %}

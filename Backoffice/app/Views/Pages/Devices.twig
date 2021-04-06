@@ -1,0 +1,203 @@
+{% extends "Layout.twig" %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/css/gestion_sequence.css">
+<style>
+    .notification{
+      position: fixed;
+      bottom: 0;
+      left:0;
+      width: 100%;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div id="notification_block" class="notification" style="z-index: 999;display: none;">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hideNotification()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p></p>
+</div>
+
+<h1>Gestion des dispositifs d'affichage</h1>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th style="width: 30%;">Nom du dispositif</th>
+            <th style="width: 25%;">Emplacement</th>
+            <th style="width: 25%;">Séquence associée</th>
+            <th style="width: 25%;">Token</th>
+            <th style="width: 5%;"></th>
+            <th style="width: 5%;"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for device in devices %}
+            <tr>
+            <td class="panel_nom"><span class="editable">{{ device.nom }}</span></td>
+            <td class="panel_emplacement"><span class="editable">{{ device.lieu }}</span></td>
+            <td class="panel_token">{{ device.sequence.nom }}</td>
+            <td class="panel_token">{{ device.token }}</td>
+            <td class="panel_update">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editDevice_{{ device.id }}">
+                    <i class="far fa-edit"></i>
+                </button>
+                <div class="modal fade exampleModalClass" id="editDevice_{{ device.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="editDeviceLabel_{{ device.id }}">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="editDeviceLabel_{{ device.id }}">Modifier le dispositif</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span
+                                        aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label class="control-label">Nom du dispositif :</label>
+                                        <input type="text" value="{{ device.nom }}"
+                                            class="form-control update_nom">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Description :</label>
+                                        <input type="text" value="{{ device.description }}"
+                                            class="form-control update_description">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Emplacement :</label>
+                                        <input type="text" value="{{ device.lieu }}"
+                                            class="form-control update_lieu">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Séquence associée</label>
+                                        <select class="custom-select update_sequence">
+                                        {% for sequence in sequences %}
+                                            <option value="{{ sequence.id }}"
+                                            {% if sequence.id == device.sequence.id %} selected {% endif %}
+                                            >{{ sequence.nom }}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-dark" onclick="updateDevice({{ device.id }}, this)">Modifier le
+                                    dispositif</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="panel_delete">
+                <input type="button" value="Supprimer" class="btn btn-danger delCompteBtn" data-toggle="modal"
+                    data-target="#deleteDevice_{{ device.id }}">
+                <div class="modal fade" id="deleteDevice_{{ device.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="deleteDeviceLabel_{{ device.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="deleteDeviceLabel_{{ device.id }}">Supprimer un dispositif :</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Êtes-vous sûr de vouloir supprimer le dispositif : {{ device.nom }} ?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-danger btn-ok"
+                                    onclick="deleteDevice({{ device.id }}, this)">Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block script %}
+<script>
+function hideNotification() {
+    $('#notification_block').fadeOut('500', () => {
+        $('#notification_block').removeClass();
+    });
+}
+
+function showNotification(libelle_bootstrap, message) {
+    hideNotification();
+    $('#notification_block p').text(message)
+    $('#notification_block').addClass("notification")
+    $('#notification_block').addClass('alert alert-' + libelle_bootstrap)
+    $('#notification_block').fadeIn('500');
+}
+
+function deleteDevice(id, leBtn) {
+    let model = $(leBtn).parents().closest('.modal');
+    let lineDelet = $(leBtn).parents().closest('tr');
+
+    let http = new XMLHttpRequest();
+    let params =
+        'id=' + id;
+    http.open('POST', '{{ path_for('deviceDelete') }}', true);
+
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    http.onreadystatechange = function () {
+        if (http.readyState == 4 && http.status == 200) {
+            if (http.responseText == 'success') {
+                $(model).modal('hide');
+                showNotification('success', "Le dispositif a bien été supprimé.");
+                $(lineDelet).hide('slow', function () {
+                    $(lineDelet).remove();
+                });
+            } else {
+                showNotification('danger', 'Erreur : ' + http.responseText);
+            }
+        }
+    }
+    http.send(params);
+}
+
+function updateDevice(id, leBtn) {
+    let bodyModal = $(leBtn).parent().prev('.modal-body');
+    let nom = $(bodyModal).find('.update_nom').val();
+    let description = $(bodyModal).find('.update_description').val();
+    let lieu = $(bodyModal).find('.update_lieu').val();
+    let id_sequence = $(bodyModal).find('.update_sequence').val();
+
+    if (id, nom, description, lieu, id_sequence) {
+        let model = $(leBtn).parents().closest('.modal');
+        let lineUpdate = $(leBtn).parents().closest('tr');
+        let http = new XMLHttpRequest();
+
+        let params =
+            'id=' + id +
+            '&newNom=' + nom +
+            '&newDescription=' + description +
+            '&newLieu=' + lieu +
+            '&newIdSequence=' + id_sequence;
+        http.open('POST', '{{ path_for('deviceUpdate') }}', true);
+
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        http.onreadystatechange = function () {
+            if (http.readyState == 4 && http.status == 200) {
+                if (http.responseText == 'success') {
+                    $(lineUpdate).find('.panel_nom').text(nom);
+                    $(lineUpdate).find('.panel_emplacement').text(lieu);
+                    $(model).modal('hide');
+                    showNotification('success', "Succès : Le dispositif : " + nom + " a bien été modifié.");
+                } else {
+                    showNotification('danger', http.responseText);
+                }
+            }
+        }
+        http.send(params);
+    } else {
+        alert("Une erreur est survenue : des champs sont manquants, introuvable, ou incomplet \n\rSi le problème persiste actualisez la page ou contacter l'administrateur du site");
+    }
+}
+</script>
+{% endblock %}
